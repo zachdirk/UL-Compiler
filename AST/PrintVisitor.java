@@ -69,7 +69,12 @@ public class PrintVisitor implements Visitor {
 	public void visit(ParenExpression e){
 		System.out.println("( " + e.expr + " )");
 	}
-	//public void visit(PrintLnStatement s){}
+	public void visit(PrintStatement s){
+		System.out.println(s);
+	}
+	public void visit(PrintLnStatement s){
+		System.out.println(s);
+	}
 	public void visit(Program p){
 		Vector v = p.functionList;
 		for (int i = 0; i < v.size(); i++){

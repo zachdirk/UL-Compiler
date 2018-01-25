@@ -31,7 +31,8 @@ public interface Visitor{
 	public void visit(LessThanExpression e);
 	public void visit(MultExpression e);
 	public void visit(ParenExpression e);
-	//public void visit(PrintLnStatement s);
+	public void visit(PrintStatement s);
+	public void visit(PrintLnStatement s);
 	public void visit(Program p);
 	//public void visit(ReturnStatement s);
 	//public void visit(StringLiteral s);

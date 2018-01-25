@@ -51,47 +51,41 @@ compoundType returns [Type t]
 		;
 
 type returns [Type t]
-		: t2=intType {t = t2;}
-		| t2=floatType {t = t2;}
-		| t2=charType {t = t2;}
-		| t2=stringType {t = t2;}
-		| t2=booleanType {t = t2;}
-		| t2=voidType {t = t2;}
+		: t2=intType {t = new IntegerType();}
+		| t2=floatType {t = new FloatType();}
+		| t2=charType {t = new CharType();}
+		| t2=stringType {t = new StringType();}
+		| t2=booleanType {t = new BooleanType();}
+		| t2=voidType {t = new VoidType();}
 		;
 
-intType returns [Type t]
-		: INTTYPE {t = new IntegerType();}
+intType 	: INTTYPE 
 		;
 
-floatType returns [Type t]
-		: FLOATTYPE {t = new FloatType();}
+floatType 	: FLOATTYPE 
 		;
 
-charType returns [Type t]
-		: CHARTYPE {t = new CharType();}
+charType 	: CHARTYPE 
 		;
 
-booleanType returns [Type t]
-		: BOOLEANTYPE {t = new BooleanType();}
+booleanType 	: BOOLEANTYPE 
 		;
 
-stringType returns [Type t]
-		: STRINGTYPE {t = new StringType();}
+stringType 	: STRINGTYPE 
 		;
 
-voidType returns [Type t]
-		: VOIDTYPE {t = new VoidType();}
+voidType 	: VOIDTYPE 
 		;
 
 arrayType returns [Type t]
-		: t2=type '[' INTCONSTANT ']' {t = new ArrayType(t2);}
+		: t2=type '[' i=intLiteral ']' {t = new ArrayType(t2, i);}
 		;
 
 statement returns [Statement s] options {backtrack=true;} 
-		: ifStmt
+		: ifStmt 
 		| whileStmt
-		| printStmt
-		| printlnStmt
+		| s2=printStmt {s=s2;}
+		| s2=printlnStmt {s=s2;}
 		| returnStmt
 		| assignStmt
 		| arrAssignStmt
@@ -107,11 +101,13 @@ ifStmt options {backtrack=true;}
 whileStmt	: WHILE '(' expr ')' block
 		;
 
-printStmt	: PRINT expr ';'
+printStmt returns [PrintStatement p]	
+		: PRINT e=expr ';' {p = new PrintStatement(e);}
 		;
 
 
-printlnStmt	: PRINTLN expr ';'
+printlnStmt returns [PrintLnStatement p]
+		: PRINTLN e=expr ';' {p = new PrintLnStatement(e);}
 		;
 
 returnStmt	: RETURN expr? ';'
@@ -132,7 +128,7 @@ varDecl	returns [VariableDeclaration vd]
 block		: '{' statement* '}'
 		;
 
-expr		: ltExpr ('==' ltExpr)*
+expr		: ltExpr ('==' ltExpr)* 
 		;
 
 ltExpr		: asExpr ('<' asExpr)*
@@ -168,16 +164,32 @@ exprList 	: expr exprMore*
 exprMore	: ',' expr
 		;
 
-literal		: STRINGCONSTANT
-		| INTCONSTANT
-		| FLOATCONSTANT
-		| CHARCONSTANT
+literal		: strLiteral
+		| intLiteral
+		| floatLiteral
+		| charLiteral
 		| TRUE
 		| FALSE
 		;
 
 id returns [Identifier i]
 		: i2=ID {i = new Identifier($i2.text);}
+		;
+
+intLiteral returns [IntegerLiteral l]
+		: i=INTCONSTANT {l = new IntegerLiteral(Integer.parseInt($i.text));}
+		;
+
+strLiteral returns [StringLiteral l]
+		: s=STRINGCONSTANT {l = new StringLiteral($s.text);}
+		;
+
+floatLiteral returns [FloatLiteral l]
+		: f=FLOATCONSTANT {l = new FloatLiteral(Double.parseDouble($f.text));}
+		;
+
+charLiteral returns [CharacterLiteral l]
+		: c=CHARCONSTANT {l = new CharacterLiteral($c.text);}
 		;
 
 STRINGCONSTANT	: '\"' ('a'..'z'|'A'..'Z'|'0'..'9'|' ')* '\"'
