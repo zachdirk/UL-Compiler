@@ -1,0 +1,3 @@
+Submission for CSC435 Assignment 1 part 1 by Zachary Dirk.
+Compile by using MAKE. I have not changed anything other than the name of the grammar file.
+Tests can be run using bash runTests.sh
