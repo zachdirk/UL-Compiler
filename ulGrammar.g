@@ -199,9 +199,9 @@ parenExpression	returns [ParenExpression p]
 		: '(' e=expr ')' {p = new ParenExpression(e);}
 		;
 
-exprList returns [Vector v]
+exprList returns [Vector<Expression> v]
 @init {
-	v = new Vector();
+	v = new Vector<Expression>();
 }
 	 	: e=expr {v.add(e);} (e2=exprMore {v.add(e2);})*
 		|

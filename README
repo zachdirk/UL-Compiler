@@ -1,3 +1,6 @@
-Submission for CSC435 Assignment 1 part 1 by Zachary Dirk.
+Submission for CSC435 Assignment 1 part 2 by Zachary Dirk.
 Compile by using MAKE. I have not changed anything other than the name of the grammar file.
-Tests can be run using bash runTests.sh
+To evoke the compiler, use "java Compiler [filename]"
+To evoke the pretty printer, add the -pp flag e.g.: "java Compiler [filename] -pp"
+You can redirect the pretty printer output to a file like so "java Compiler [filename] -pp > output.txt"
+
