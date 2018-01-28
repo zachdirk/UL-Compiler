@@ -1,5 +1,5 @@
 package AST;
-public class ArrayAssignment extends ASTNode {
+public class ArrayAssignment extends Statement {
 	
 	Identifier id;
 	Expression index;

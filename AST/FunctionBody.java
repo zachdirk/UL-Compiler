@@ -39,15 +39,4 @@ public class FunctionBody extends ASTNode {
 		v.visit(this);
 	}
 
-	public String toString(){
-		String s = "";
-		for (int i = 0; i < varDecls.size(); i++){
-			s = s + varDecls.get(i).toString() + '\n';
-		}
-		/*for (int i = 0; i < statements.size(); i++){
-			s = s + statements.get(i).toString() + '\n';
-		}*/
-		return(s);
-	}
-
 }

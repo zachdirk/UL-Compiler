@@ -11,4 +11,8 @@ public class MultExpression extends Expression {
 	public void accept (Visitor v){
 		v.visit(this);
 	}
+
+	public String toString(){
+		return (expr1.toString() + "*" + expr2.toString());
+	}
 }

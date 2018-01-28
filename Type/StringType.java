@@ -5,7 +5,7 @@ public class StringType extends Type {
 		
 	}
 	public String toString() {
-		return "String";
+		return "string";
 	}
 	public boolean equals (Object o){
 		return (o instanceof StringType);

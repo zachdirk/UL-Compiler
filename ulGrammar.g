@@ -3,6 +3,7 @@ grammar ulGrammar;
 {
 	import AST.*;
 	import Type.*;
+	import java.util.Vector;
 }
 program returns [Program p]
 @init
@@ -82,98 +83,148 @@ arrayType returns [Type t]
 		;
 
 statement returns [Statement s] options {backtrack=true;} 
-		: ifStmt 
-		| whileStmt
+		: s0=ifStmt {s=s0;}
+		| s1=whileStmt {s=s1;}
 		| s2=printStmt {s=s2;}
-		| s2=printlnStmt {s=s2;}
-		| returnStmt
-		| assignStmt
-		| arrAssignStmt
-		| exprStmt
+		| s3=printlnStmt {s=s3;}
+		| s4=returnStmt {s=s4;}
+		| s5=assignStmt {s=s5;}
+		| s6=arrAssignStmt {s=s6;}
+		| s7=exprStmt {s=s7;}
 		| ';'
 		; 
 
-ifStmt options {backtrack=true;}
-		: IF '(' expr ')' block ELSE block
-		| IF '(' expr ')' block
+ifStmt returns [IfStatement s] options {backtrack=true;}
+		: IF '(' e1=expr ')' b1=block ELSE b2=block {s = new IfStatement(e1,b1,b2);}
+		| IF '(' e1=expr ')' b1=block {s = new IfStatement(e1,b1,null);}
 		;
 
-whileStmt	: WHILE '(' expr ')' block
+whileStmt returns [WhileStatement w]
+		: WHILE '(' e=expr ')' b=block {w = new WhileStatement(e, b);}
 		;
 
 printStmt returns [PrintStatement p]	
 		: PRINT e=expr ';' {p = new PrintStatement(e);}
 		;
 
-
 printlnStmt returns [PrintLnStatement p]
 		: PRINTLN e=expr ';' {p = new PrintLnStatement(e);}
 		;
 
-returnStmt	: RETURN expr? ';'
+returnStmt returns [ReturnStatement r]	
+		: RETURN e=expr? ';' {r = new ReturnStatement(e);}
 		;
 
-assignStmt	: id '=' expr ';'
+assignStmt returns [AssignmentStatement a]	
+		: i=id '=' e=expr ';' {a = new AssignmentStatement(i, e);}
 		;
-arrAssignStmt	: id '[' expr ']' '=' expr ';'
+arrAssignStmt returns [ArrayAssignment a]	
+		: i=id '[' e1=expr ']' '=' e2=expr ';' {a = new ArrayAssignment(i, e1, e2);}
 		;
 
-exprStmt	: expr ';'
+exprStmt returns [Statement s]
+		: e1=expr ';' {s = new ExpressionStatement(e1);}
 		;
 
 varDecl	returns [VariableDeclaration vd] 
 		: t=compoundType i=id ';' {vd = new VariableDeclaration(t, i);}
 		;
 
-block		: '{' statement* '}'
+block returns [Block b]
+@init{
+	b = new Block();
+}
+		: '{' (s=statement {b.addElement(s);})* '}'
 		;
 
-expr		: ltExpr ('==' ltExpr)* 
+expr returns [Expression e]
+@init {
+	Expression it = null;
+}
+@after {
+	e = it;
+}
+
+		: e1=ltExpr {it = e1;} ('==' e2=ltExpr {it = new EqualityExpression(it, e2);} )* 
 		;
 
-ltExpr		: asExpr ('<' asExpr)*
+ltExpr returns [Expression e]
+@init {
+	Expression it = null;
+}
+@after { 
+	e = it;
+}
+
+		: e1=asExpr {it = e1;} ('<' e2=asExpr {it = new LessThanExpression(it, e2);} )*
 		;
 
-
-asExpr		: multExpr (('+'|'-') multExpr)*
+asExpr returns [Expression e]	
+@init {
+	Expression it = null;
+}
+@after {
+	e = it;
+}
+		: e1=multExpr {it = e1;} (c=('+'|'-') e2=multExpr {if ($c.text.charAt(0) == '+') it = new AddExpression(it, e2); else it = new SubtractExpression(it, e2);})*
 		;
+multExpr returns [Expression e]
+@init {
+	Expression it = null;
+}	
+@after {
+	e = it;
+}
 
-multExpr	: atom ('*' atom)*
+		: e1=atom {it = e1;} ('*' e2=atom {it = new MultExpression(it, e2);})*
 		; 
 
-atom 		: id
-		| arrayReference 
-		| functionCall
-		| literal
-		| parenExpression
-		;	
-
-arrayReference	: id '[' expr ']'
+atom returns [Expression e]
+		: e1=idVal {e = e1;}
+		| e2=arrayReference {e = e2;}
+		| e3=functionCall {e = e3;}
+		| e4=literal {e = e4;}
+		| e5=parenExpression {e = e5;}
 		;
 
-functionCall	: id '(' exprList ')'
+arrayReference returns [ArrayReference e]
+		: i=id '[' intlit=intLiteral ']' {e = new ArrayReference(i, intlit);}
 		;
 
-parenExpression	: '(' expr ')'
+functionCall returns [FunctionCall f]
+		: i=id '(' v=exprList ')' {f = new FunctionCall(i, v);}
 		;
 
-exprList 	: expr exprMore*
+parenExpression	returns [ParenExpression p]
+		: '(' e=expr ')' {p = new ParenExpression(e);}
+		;
+
+exprList returns [Vector v]
+@init {
+	v = new Vector();
+}
+	 	: e=expr {v.add(e);} (e2=exprMore {v.add(e2);})*
 		|
 		;
 
-exprMore	: ',' expr
+exprMore returns [Expression e]	
+		: ',' e1=expr {e = e1;}
 		;
 
-literal		: strLiteral
-		| intLiteral
-		| floatLiteral
-		| charLiteral
-		| TRUE
-		| FALSE
+literal	returns [Expression e]
+		: e1=strLiteral {e = e1;}
+		| e2=intLiteral {e = e2;}
+		| e3=floatLiteral {e = e3;}
+		| e4=charLiteral {e = e4;}
+		| e5=booleanLiteral {e = e5;}
 		;
 
 id returns [Identifier i]
 		: i2=ID {i = new Identifier($i2.text);}
+		;
+
+idVal returns [Expression e]
+		: e2=ID {e = new IdentifierValue($e2.text);}
 		;
 
 intLiteral returns [IntegerLiteral l]
@@ -190,6 +241,11 @@ floatLiteral returns [FloatLiteral l]
 
 charLiteral returns [CharacterLiteral l]
 		: c=CHARCONSTANT {l = new CharacterLiteral($c.text);}
+		;
+
+booleanLiteral returns [BooleanLiteral l]
+		: b=TRUE {l = new BooleanLiteral(true);}
+		| b=FALSE {l = new BooleanLiteral(false);}
 		;
 
 STRINGCONSTANT	: '\"' ('a'..'z'|'A'..'Z'|'0'..'9'|' ')* '\"'

@@ -25,18 +25,4 @@ public class FormalParameterList extends ASTNode {
 		v.visit(this);
 	}
 
-	public String toString(){
-		if (parameterList.isEmpty()){
-			return "";
-		}
-		String s = "";
-		FormalParameter fp = (FormalParameter)parameterList.get(0);
-		s = fp.toString();
-		for (int i = 1; i < parameterList.size(); i++){
-			fp = (FormalParameter)parameterList.get(i);			
-			s = s + ", " + fp.toString();
-		}
-		return s;
-	}
-
 }
