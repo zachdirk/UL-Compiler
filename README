@@ -2,5 +2,6 @@ Submission for CSC435 Assignment 1 part 2 by Zachary Dirk.
 Compile by using MAKE. I have not changed anything other than the name of the grammar file.
 To evoke the compiler, use "java Compiler [filename]"
 To evoke the pretty printer, add the -pp flag e.g.: "java Compiler [filename] -pp"
-You can redirect the pretty printer output to a file like so "java Compiler [filename] -pp > output.txt"
-
+You can redirect the pretty printer output to a file for easy comparison like so "java Compiler [filename] -pp > output.txt"
+There are a few Xlint warnings (unchecked type) that I haven't completely cleaned up yet
+There is astonishingly few comments, that will be fixed

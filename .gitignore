@@ -1,0 +1,4 @@
+tests/
+*.tar
+*.gz
+setup.sh

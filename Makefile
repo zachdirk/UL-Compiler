@@ -1,4 +1,3 @@
-#
 GNAME= ulGrammar
 GSRC= $(GNAME).g
 
@@ -11,9 +10,6 @@ compiler:
 	javac *.java -Xlint:unchecked
 
 clean:
-	rm *.class $(GNAME)*.java $(GNAME)__.g $(GNAME).tokens *~
-	rm Type/*.class Type/*~
-	rm AST/*.class AST/*~
-
+	rm *.class $(GNAME)*.java $(GNAME)__.g $(GNAME).tokens *~ Type/*.class Type/*~ AST/*.class AST/*~
 
  

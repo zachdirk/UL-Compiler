@@ -30,8 +30,11 @@ public class Compiler {
 		Visitor v = new PrintVisitor();
 		try {
 			p = parser.program();
-			p.accept(v);
-
+			if (args.length > 1) {
+				if (args[1].equals("-pp")){
+					p.accept(v);
+				}
+			}
 		}
 		catch (RecognitionException e )	{
 			// A lexical or parsing error occured.
