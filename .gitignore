@@ -1,4 +1,9 @@
 tests/
 *.tar
 *.gz
+*.class
+ulGrammar.tokens
+ulGrammarLexer.java
+ulGrammarParser.java
+ulGrammar__.g
 setup.sh
