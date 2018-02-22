@@ -4,6 +4,10 @@ public class IntegerType extends Type{
 	public IntegerType(){
 	
 	}
+	public IntegerType(int lineNumber, int offest){
+		this.lineNumber = lineNumber;
+		this.offset = offest;
+	}
 	public String toString(){
 		return "int";
 	}

@@ -4,6 +4,10 @@ public class VoidType extends Type {
 	public VoidType (){
 
 	}
+	public VoidType (int lineNumber, int offset){
+		this.lineNumber = lineNumber;
+		this.offset = offset;
+	}
 	public String toString() {
 		return "void";
 	}

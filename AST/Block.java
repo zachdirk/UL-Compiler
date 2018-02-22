@@ -2,10 +2,10 @@ package AST;
 import java.util.Vector;
 public class Block{
 
-	Vector statements;
+	Vector<Statement> statements;
 
 	public Block(){
-		statements = new Vector();
+		statements = new Vector<Statement>();
 	}
 	public void addElement(Statement s){
 		statements.addElement(s);

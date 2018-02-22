@@ -3,12 +3,12 @@ import java.util.Vector;
 
 public class FunctionBody extends ASTNode {
 	
-	Vector varDecls;
-	Vector statements;
+	Vector<VariableDeclaration> varDecls;
+	Vector<Statement> statements;
 
 	public FunctionBody(){
-		varDecls = new Vector();
-		statements = new Vector();
+		varDecls = new Vector<VariableDeclaration>();
+		statements = new Vector<Statement>();
 	}
 
 	public void addVarDecl(VariableDeclaration vd){

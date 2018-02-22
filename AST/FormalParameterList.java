@@ -3,10 +3,10 @@ import Type.*;
 import java.util.Vector;
 public class FormalParameterList extends ASTNode {
 	
-	Vector parameterList;
+	Vector<FormalParameter> parameterList;
 
 	public FormalParameterList(){
-		parameterList = new Vector();
+		parameterList = new Vector<FormalParameter>();
 	}
 
 	public void addElement (FormalParameter f){

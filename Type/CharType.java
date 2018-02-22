@@ -4,6 +4,10 @@ public class CharType extends Type {
 	public CharType(){
 	
 	}
+	public CharType (int lineNumber, int offset){
+		this.lineNumber = lineNumber;
+		this.offset = offset;
+	}
 	public String toString() {
 		return "char";
 	}

@@ -52,30 +52,36 @@ compoundType returns [Type t]
 		;
 
 type returns [Type t]
-		: t2=intType {t = new IntegerType();}
-		| t2=floatType {t = new FloatType();}
-		| t2=charType {t = new CharType();}
-		| t2=stringType {t = new StringType();}
-		| t2=booleanType {t = new BooleanType();}
-		| t2=voidType {t = new VoidType();}
+		: t0=intType {t = t0;}
+		| t1=floatType {t = t1;}
+		| t2=charType {t = t2;}
+		| t3=stringType {t = t3;}
+		| t4=booleanType {t = t4;}
+		| t5=voidType {t = t5;}
 		;
 
-intType 	: INTTYPE 
+intType returns [IntegerType t]
+		: i=INTTYPE {t = new IntegerType($i.line, $i.pos);}
 		;
 
-floatType 	: FLOATTYPE 
+floatType returns [FloatType t]
+		: f=FLOATTYPE {t = new FloatType($f.line, $f.pos);} 
 		;
 
-charType 	: CHARTYPE 
+charType returns [CharType t]
+		: c=CHARTYPE {t = new CharType($c.line, $c.pos);} 
 		;
 
-booleanType 	: BOOLEANTYPE 
+booleanType returns [BooleanType t]
+		: b=BOOLEANTYPE {t = new BooleanType($b.line, $b.pos);} 
 		;
 
-stringType 	: STRINGTYPE 
+stringType returns [StringType t]
+		: s=STRINGTYPE {t = new StringType($s.line, $s.pos);} 
 		;
 
-voidType 	: VOIDTYPE 
+voidType returns [VoidType t]
+		: v=VOIDTYPE {t = new VoidType($v.line, $v.pos);} 
 		;
 
 arrayType returns [Type t]
@@ -220,7 +226,7 @@ literal	returns [Expression e]
 		;
 
 id returns [Identifier i]
-		: i2=ID {i = new Identifier($i2.text);}
+		: i2=ID {i = new Identifier($i2.text, $i2.line, $i2.pos);}
 		;
 
 idVal returns [Expression e]
@@ -228,24 +234,24 @@ idVal returns [Expression e]
 		;
 
 intLiteral returns [IntegerLiteral l]
-		: i=INTCONSTANT {l = new IntegerLiteral(Integer.parseInt($i.text));}
+		: i=INTCONSTANT {l = new IntegerLiteral(Integer.parseInt($i.text), $i.line, $i.pos);}
 		;
 
 strLiteral returns [StringLiteral l]
-		: s=STRINGCONSTANT {l = new StringLiteral($s.text);}
+		: s=STRINGCONSTANT {l = new StringLiteral($s.text, $s.line, $s.pos);}
 		;
 
 floatLiteral returns [FloatLiteral l]
-		: f=FLOATCONSTANT {l = new FloatLiteral(Double.parseDouble($f.text));}
+		: f=FLOATCONSTANT {l = new FloatLiteral(Double.parseDouble($f.text), $f.line, $f.pos);}
 		;
 
 charLiteral returns [CharacterLiteral l]
-		: c=CHARCONSTANT {l = new CharacterLiteral($c.text);}
+		: c=CHARCONSTANT {l = new CharacterLiteral($c.text, $c.line, $c.pos);}
 		;
 
 booleanLiteral returns [BooleanLiteral l]
-		: b=TRUE {l = new BooleanLiteral(true);}
-		| b=FALSE {l = new BooleanLiteral(false);}
+		: b=TRUE {l = new BooleanLiteral(true, $b.line, $b.pos);}
+		| b=FALSE {l = new BooleanLiteral(false, $b.line, $b.pos);}
 		;
 
 STRINGCONSTANT	: '\"' ('a'..'z'|'A'..'Z'|'0'..'9'|' ')* '\"'

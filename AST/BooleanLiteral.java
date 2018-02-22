@@ -1,8 +1,13 @@
 package AST;
 public class BooleanLiteral extends Expression{
 	boolean b;
-	public BooleanLiteral(boolean b){
+	int lineNumber;
+	int offset;
+
+	public BooleanLiteral(boolean b, int lineNumber, int offset){
 		this.b = b;
+		this.lineNumber = lineNumber;
+		this.offset = offset;
 	}
 	public String toString(){
 		String s = "";
