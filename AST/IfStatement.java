@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 public class IfStatement extends Statement{
 	Expression condition;
 	Block b1;
@@ -8,7 +9,9 @@ public class IfStatement extends Statement{
 		this.b1=b1;
 		this.b2=b2;
 	}
-	public void accept(Visitor v){
-		v.visit(this);
+
+	public Type accept(Visitor v){
+		return(v.visit(this));
 	}
+
 }

@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 public class ArrayReference extends Expression{
 	Identifier id;
 	IntegerLiteral i;
@@ -10,7 +11,8 @@ public class ArrayReference extends Expression{
 		String s = id.toString() + "[" + i.toString() + "]";
 		return(s);
 	}
-	public void accept (Visitor v){
-		v.visit(this);
+
+	public Type accept(Visitor v){
+		return(v.visit(this));
 	}
 }

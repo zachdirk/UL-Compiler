@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 public class ExpressionStatement extends Statement{
 	
 	Expression e;
@@ -6,7 +7,9 @@ public class ExpressionStatement extends Statement{
 	public ExpressionStatement(Expression e){
 		this.e = e;
 	}
-	public void accept(Visitor v){
-		v.visit(this);
+
+	public Type accept(Visitor v){
+		return(v.visit(this));
 	}
+
 }

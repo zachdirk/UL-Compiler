@@ -14,9 +14,9 @@ public class Identifier extends ASTNode {
 		return id;
 	}
 
-	public void accept (Visitor v)
-	{
-		v.visit(this);
+	public Type accept(Visitor v){
+		return(v.visit(this));
 	}
+
 
 }

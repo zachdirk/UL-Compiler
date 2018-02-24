@@ -8,8 +8,8 @@ public class FormalParameter extends ASTNode {
 		this.id = id;
 	}
 	
-	void accept (Visitor v){
-		v.visit(this);
+	public Type accept(Visitor v){
+		return(v.visit(this));
 	}
 
 	public String toString (){

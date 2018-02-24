@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 public class FloatLiteral extends Expression{
 	double f;
 	int lineNumber;
@@ -12,7 +13,9 @@ public class FloatLiteral extends Expression{
 	public String toString(){
 		return "" + f;
 	}
-	public void accept(Visitor v){
-		v.visit(this);
+
+	public Type accept(Visitor v){
+		return(v.visit(this));
 	}
+
 }

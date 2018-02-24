@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 public class WhileStatement extends Statement{
 	
 	Expression condition;
@@ -9,7 +10,9 @@ public class WhileStatement extends Statement{
 		this.b = b;
 	}
 
-	public void accept(Visitor v){
-		v.visit(this);
+	public Type accept(Visitor v){
+		return(v.visit(this));
 	}
+
+
 }

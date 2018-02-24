@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 public class ParenExpression extends Expression {
 	Expression expr;
 
@@ -6,9 +7,10 @@ public class ParenExpression extends Expression {
 		expr = e;
 	}
 
-	public void accept (Visitor v){
-		v.visit(this);
+	public Type accept(Visitor v){
+		return(v.visit(this));
 	}
+
 	public String toString(){
 		return ("(" + expr.toString() + ")");
 	}

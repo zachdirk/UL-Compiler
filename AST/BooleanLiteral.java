@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 public class BooleanLiteral extends Expression{
 	boolean b;
 	int lineNumber;
@@ -17,7 +18,8 @@ public class BooleanLiteral extends Expression{
 			s = "false";
 		return(s);
 	}
-	public void accept(Visitor v){
-		v.visit(this);
+
+	public Type accept(Visitor v){
+		return(v.visit(this));
 	}
 }

@@ -1,5 +1,6 @@
 package AST;
 import java.util.Vector;
+import Type.*;
 public class Program extends ASTNode {
 	Vector<Function> functionList;
 	
@@ -19,8 +20,10 @@ public class Program extends ASTNode {
 		return functionList.size();
 	}
 
-	public void accept (Visitor v){
-		v.visit(this);
+	public Type accept(Visitor v){
+		return(v.visit(this));
 	}
+
+
 }
 

@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 import java.util.Vector;
 public class FunctionCall extends Expression{
 	Identifier id;
@@ -8,7 +9,9 @@ public class FunctionCall extends Expression{
 		this.id = id;
 		this.v = v;
 	}
-	public void accept(Visitor v){
-		v.visit(this);
+
+	public Type accept(Visitor v){
+		return(v.visit(this));
 	}
+
 }

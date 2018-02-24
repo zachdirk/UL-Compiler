@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 public class PrintLnStatement extends Statement{
 	
 	Expression e;
@@ -11,7 +12,9 @@ public class PrintLnStatement extends Statement{
 		return "println(" + e + ")";
 	}
 
-	public void accept(Visitor v){
-		v.visit(this);
+	public Type accept(Visitor v){
+		return(v.visit(this));
 	}
+
+
 }

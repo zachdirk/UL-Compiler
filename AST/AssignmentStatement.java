@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 public class AssignmentStatement extends Statement{
 	Identifier id;
 	Expression expr;
@@ -8,7 +9,7 @@ public class AssignmentStatement extends Statement{
 		expr = e;
 	}
 	
-	public void accept (Visitor v){
-		v.visit(this);
+	public Type accept(Visitor v){
+		return(v.visit(this));
 	}
 }

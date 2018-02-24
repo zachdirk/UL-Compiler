@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 public class AddExpression extends Expression {
 	Expression expr1;
 	Expression expr2;
@@ -8,10 +9,10 @@ public class AddExpression extends Expression {
 		expr2 = e2;
 	}
 
-	public void accept (Visitor v){
-		v.visit(this);
+	public Type accept(Visitor v){
+		return(v.visit(this));
 	}
-	
+
 	public String toString(){
 		return (expr1.toString() + "+" + expr2.toString());
 	}

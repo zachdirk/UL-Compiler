@@ -10,10 +10,13 @@ public class FunctionDeclaration extends ASTNode {
 		this.t = t;
 		this.id = id;
 		this.fpl = fpl;
+		this.lineNumber = id.lineNumber;
+		this.offset = id.offset;
 	}
 
-	void accept (Visitor v){
-		v.visit(this);
+	public Type accept(Visitor v){
+		return(v.visit(this));
 	}
+
 
 }

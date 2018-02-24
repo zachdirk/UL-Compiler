@@ -7,7 +7,7 @@ grammar: $(GSRCS)
 	java org.antlr.Tool -fo . $(GSRC) 
 
 compiler:
-	javac *.java -Xlint:unchecked
+	javac *.java AST/*.java Environment/*.java Type/*.java -Xlint:unchecked
 
 clean:
 	rm *.class $(GNAME)*.java $(GNAME)__.g $(GNAME).tokens *~ Type/*.class Type/*~ AST/*.class AST/*~

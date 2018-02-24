@@ -19,7 +19,7 @@ public class ArrayType extends Type {
 	public boolean equals (Object o) {
 		return (o instanceof ArrayType);
 	}
-	public void accept (Visitor v){
-		v.visit(this);
+	public Type accept (Visitor v){
+		return(v.visit(this));
 	}
 }

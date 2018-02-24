@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 public class StringLiteral extends Expression{
 	String s;
 	int lineNumber;
@@ -12,7 +13,10 @@ public class StringLiteral extends Expression{
 	public String toString(){
 		return s;
 	}
-	public void accept(Visitor v){
-		v.visit(this);
+
+	public Type accept(Visitor v){
+		return(v.visit(this));
 	}
+
+
 }

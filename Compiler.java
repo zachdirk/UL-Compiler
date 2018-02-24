@@ -26,15 +26,11 @@ public class Compiler {
 		ulGrammarLexer lexer = new ulGrammarLexer(input);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		ulGrammarParser parser = new ulGrammarParser(tokens);
-		Program p;
-		Visitor v = new PrintVisitor();
+		Program program = null;
+		Visitor print = new PrintVisitor();
+		Visitor semantic = new SemanticVisitor();
 		try {
-			p = parser.program();
-			if (args.length > 1) {
-				if (args[1].equals("-pp")){
-					p.accept(v);
-				}
-			}
+			program = parser.program();
 		}
 		catch (RecognitionException e )	{
 			// A lexical or parsing error occured.
@@ -45,6 +41,19 @@ public class Compiler {
 		catch (Exception e) {
 			System.out.println(e);
 			e.printStackTrace();
+		}
+		if (program != null){
+			if (args.length > 1) {
+				if (args[1].equals("-pp")){
+					program.accept(print);
+				}
+			}
+			try{
+				program.accept(semantic);
+			}catch (SemanticException e){
+				System.out.println(e);
+				System.exit(1);
+			}
 		}
 	}
 }

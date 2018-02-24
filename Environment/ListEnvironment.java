@@ -1,3 +1,5 @@
+//I suppressed some "unchecked" warnings because they are unavoidable and annoying when looking for actual warnings.
+
 package Environment;
 public class ListEnvironment<K,V> implements Environment<K,V>
 {
@@ -6,8 +8,8 @@ public class ListEnvironment<K,V> implements Environment<K,V>
 
 	public ListEnvironment()
 	{
-		head = new ListNode(null, null, scopeLevel, null);
 		scopeLevel = 0;
+		head = new ListNode<K,V>(null, null, scopeLevel, null);		
 	}
 
 	public void beginScope()
@@ -15,7 +17,7 @@ public class ListEnvironment<K,V> implements Environment<K,V>
 		add(null, null);
 		scopeLevel++;
 	}
-
+	@SuppressWarnings("unchecked")
 	public void endScope()
 	{
 		ListNode n = head.next;
@@ -31,20 +33,20 @@ public class ListEnvironment<K,V> implements Environment<K,V>
 	{
 		ListNode n = head.next;
 		while (n.key != null){
-			if (n.key == key){
+			if (n.key.equals(key)){
 				return true;
 			}
 			n = n.next;
 		}
 		return false;
 	}
-
+	@SuppressWarnings("unchecked")
 	public void add(K key, V value)
 	{
-		ListNode n = new ListNode(key, value, scopeLevel, head.next);
+		ListNode n = new ListNode<K,V>(key, value, scopeLevel, head.next);
 		head.next = n;
 	}
-
+	@SuppressWarnings("unchecked")
 	public V lookup(K key)
 	{
 		ListNode n = head.next;

@@ -1,4 +1,5 @@
 package AST;
+import Type.*;
 import java.util.Vector;
 public class Block{
 
@@ -19,7 +20,7 @@ public class Block{
 		return statements.size();
 	}
 
-	public void accept(Visitor v){
-		v.visit(this);
+	public Type accept(Visitor v){
+		return(v.visit(this));
 	}
 }

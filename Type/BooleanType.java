@@ -14,7 +14,7 @@ public class BooleanType extends Type {
 	public boolean equals (Object o) {
 		return (o instanceof BooleanType);
 	}
-	public void accept (Visitor v) {
-		v.visit(this);
+	public Type accept (Visitor v) {
+		return(v.visit(this));
 	}
 }
