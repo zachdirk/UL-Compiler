@@ -2,7 +2,7 @@ package Type;
 import AST.*;
 public class ArrayType extends Type {
 
-	Type t;
+	public Type t;
 	public IntegerLiteral i;
 	public ArrayType (){
 	

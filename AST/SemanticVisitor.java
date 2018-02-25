@@ -20,12 +20,17 @@ public class SemanticVisitor implements Visitor{
 	public Type visit(AddExpression e){
 		Type t1 = e.expr1.accept(this);
 		Type t2 = e.expr2.accept(this);
-		if (!t1.getClass().equals(t2.getClass()))
+		if (t1 instanceof StringType){
+			if (t2 instanceof VoidType)
+				throw new SemanticException("Type mismatch on addition expression: " + t1 + " and " + t2, e.lineNumber, e.offset);
+			else
+				return t1;
+		} else if (t1 instanceof FloatType || t2 instanceof FloatType) {
+			if (t1 instanceof IntegerType || t2 instanceof IntegerType)
+				return (new FloatType());
+		} else if (!t1.getClass().equals(t2.getClass())) {
 			throw new SemanticException("Type mismatch on addition expression: " + t1 + " and " + t2, e.lineNumber, e.offset);
-		if (t1 instanceof BooleanType)
-			throw new SemanticException("Boolean type is invalid for addition", e.expr1.lineNumber, e.expr1.offset);
-		if (t2 instanceof BooleanType)
-			throw new SemanticException("Boolean type is invalid for addition", e.expr2.lineNumber, e.expr2.offset);
+		}
 		return t1;
 	}
 	public Type visit(ArrayType t){
@@ -46,14 +51,21 @@ public class SemanticVisitor implements Visitor{
 			throw new SemanticException("Variable \"" + a.id.id + "\" undefined.", a.lineNumber, a.offset);
 		Type t1 = vEnv.lookup(a.id.id);
 		Type t2 = a.expr.accept(this);
-		if (!t1.getClass().equals(t2.getClass()))
-			throw new SemanticException("Type mismatch, variable \"" + a.id.id + "\" expected type " + t1 + " but got type " + t2, a.lineNumber, a.offset);
 		if (t1 instanceof ArrayType){
 			ArrayType a1 = (ArrayType)t1;
 			ArrayType a2 = (ArrayType)t2;			
 			if (a1.i != a2.i)
 				throw new SemanticException("Array lengths do not match, expected " + a1.i + " but got " + a2.i, a.lineNumber, a.offset);
+			else if (a1.t != a2.t)
+				throw new SemanticException("Array types do not match, expected " + a1.t + " but got " + a2.t, a.lineNumber, a.offset);
 		}
+		if (!t1.getClass().equals(t2.getClass())){
+			if ((t1 instanceof IntegerType && t2 instanceof FloatType) || (t1 instanceof FloatType && t2 instanceof IntegerType))
+				return t1;
+			else
+				throw new SemanticException("Type mismatch, variable \"" + a.id.id + "\" expected type " + t1 + " but got type " + t2, a.lineNumber, a.offset);
+		}		
+		
 		return t1;
 	}
 	public Type visit(Block b){
@@ -74,8 +86,11 @@ public class SemanticVisitor implements Visitor{
 	public Type visit(EqualityExpression e){
 		Type t1 = e.expr1.accept(this);
 		Type t2 = e.expr2.accept(this);
-		if (!t1.getClass().equals(t2.getClass()))
-			throw new SemanticException("Type mismatch on equality expression: " + t1 + " and " + t2, e.lineNumber, e.offset);	
+		if (!t1.getClass().equals(t2.getClass())){
+			if ((t1 instanceof IntegerType && t2 instanceof FloatType) || (t1 instanceof FloatType && t2 instanceof IntegerType))
+				return new BooleanType();
+			else throw new SemanticException("Type mismatch on equality expression: " + t1 + " and " + t2, e.lineNumber, e.offset);
+		}		
 		return new BooleanType();
 	}
 	public Type visit(ExpressionStatement e){
@@ -132,8 +147,10 @@ public class SemanticVisitor implements Visitor{
 		for (int i = 0; i < v.size(); i++){
 			Type t1 = (((Expression)v.get(i)).accept(this));
 			Type t2 = ((FormalParameter)v2.get(i)).t;
-			if (!t1.getClass().equals(t2.getClass()))
-				throw new SemanticException("Type mismatch invoking function \"" + id + "\", parameter " + (i+1) + " has type " + t1 + ", function expects type " + t2, f.lineNumber, t1.offset);
+			if (!t1.getClass().equals(t2.getClass())){
+				if (!((t1 instanceof IntegerType && t2 instanceof FloatType) || (t1 instanceof FloatType && t2 instanceof IntegerType)))
+					throw new SemanticException("Type mismatch invoking function \"" + id + "\", parameter " + (i+1) + " has type " + t1 + ", function expects type " + t2, f.lineNumber, t1.offset);
+			}
 		}
 		
 		return fd.t;
@@ -186,15 +203,21 @@ public class SemanticVisitor implements Visitor{
 	public Type visit(LessThanExpression e){
 		Type t1 = e.expr1.accept(this);
 		Type t2 = e.expr2.accept(this);
-		if (!t1.getClass().equals(t2.getClass()))
-			throw new SemanticException("Type mismatch on less-than expression: " + t1 + " and " + t2, e.lineNumber, e.offset);	
+		if (!t1.getClass().equals(t2.getClass())){
+			if ((t1 instanceof IntegerType && t2 instanceof FloatType) || (t1 instanceof FloatType && t2 instanceof IntegerType))
+				return new BooleanType();
+			throw new SemanticException("Type mismatch on less-than expression: " + t1 + " and " + t2, e.lineNumber, e.offset);
+		}	
 		return new BooleanType();
 	}
 	public Type visit(MultExpression e){
 		Type t1 = e.expr1.accept(this);
 		Type t2 = e.expr2.accept(this);
-		if (!t1.getClass().equals(t2.getClass()))
+		if (!t1.getClass().equals(t2.getClass())){
+			if ((t1 instanceof IntegerType && t2 instanceof FloatType) || (t1 instanceof FloatType && t2 instanceof IntegerType))
+				return new FloatType();
 			throw new SemanticException("Type mismatch on multiplication expression: " + t1 + " and " + t2, e.lineNumber, e.offset);
+		}
 		if (t1 instanceof BooleanType)
 			throw new SemanticException("Boolean type is invalid for multiplication", e.expr1.lineNumber, e.expr1.offset);
 		if (t2 instanceof BooleanType)
@@ -247,10 +270,14 @@ public class SemanticVisitor implements Visitor{
 		return null;
 	}
 	public Type visit(ReturnStatement s){
-		Type t = s.e.accept(this);
-		if (!t.getClass().equals(currentFunctionType.getClass()))
-			throw new SemanticException("Return statement type " + t + " does not match function return type " + currentFunctionType, s.lineNumber, s.offset);
-		return(s.e.accept(this));
+		Type t1 = s.e.accept(this);
+		Type t2 = currentFunctionType;
+		if (!t1.getClass().equals(t2.getClass())){
+			if ((t1 instanceof IntegerType && t2 instanceof FloatType) || (t1 instanceof FloatType && t2 instanceof IntegerType))
+				return new FloatType();
+			throw new SemanticException("Return statement type " + t1 + " does not match function return type " + t2, s.lineNumber, s.offset);
+		}
+		return(t1);
 	}
 	public Type visit(StringLiteral s){
 		return new StringType();
@@ -258,16 +285,15 @@ public class SemanticVisitor implements Visitor{
 	public Type visit(SubtractExpression e){
 		Type t1 = e.expr1.accept(this);
 		Type t2 = e.expr2.accept(this);
-		if (!t1.getClass().equals(t2.getClass()))
+		if (!t1.getClass().equals(t2.getClass())){
+			if ((t1 instanceof IntegerType && t2 instanceof FloatType) || (t1 instanceof FloatType && t2 instanceof IntegerType))
+				return new FloatType();
 			throw new SemanticException("Type mismatch on subtraction expression: " + t1 + " and " + t2, e.lineNumber, e.offset);
-		if (t1 instanceof BooleanType)
+		}
+		if (t1 instanceof BooleanType || t2 instanceof BooleanType)
 			throw new SemanticException("Boolean type is invalid for subtraction", e.expr1.lineNumber, e.expr1.offset);
-		if (t2 instanceof BooleanType)
-			throw new SemanticException("Boolean type is invalid for subtraction", e.expr2.lineNumber, e.expr2.offset);
-		if (t1 instanceof StringType)
+		if (t1 instanceof StringType || t2 instanceof StringType)
 			throw new SemanticException("String type is invalid for subtraction", e.expr1.lineNumber, e.expr1.offset);
-		if (t2 instanceof StringType)
-			throw new SemanticException("String type is invalid for subtraction", e.expr2.lineNumber, e.expr2.offset);
 		return t1;
 	}
 	public Type visit(StringType t){
