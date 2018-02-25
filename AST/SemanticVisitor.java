@@ -42,6 +42,8 @@ public class SemanticVisitor implements Visitor{
 		return t;
 	}
 	public Type visit(AssignmentStatement a){
+		if (!vEnv.inCurrentScope(a.id.id))
+			throw new SemanticException("Variable \"" + a.id.id + "\" undefined.", a.lineNumber, a.offset);
 		Type t1 = vEnv.lookup(a.id.id);
 		Type t2 = a.expr.accept(this);
 		if (!t1.getClass().equals(t2.getClass()))
@@ -171,7 +173,8 @@ public class SemanticVisitor implements Visitor{
 		if (!(t instanceof BooleanType))
 			throw new SemanticException("If statement condition must have type boolean, found " + t, s.lineNumber, s.offset);
 		s.b1.accept(this);
-		s.b2.accept(this);
+		if (s.b2 != null)
+			s.b2.accept(this);
 		return t;
 	}
 	public Type visit(IntegerLiteral i){
@@ -245,7 +248,7 @@ public class SemanticVisitor implements Visitor{
 	}
 	public Type visit(ReturnStatement s){
 		Type t = s.e.accept(this);
-		if (!t.getClass().equals(currentFunctionType))
+		if (!t.getClass().equals(currentFunctionType.getClass()))
 			throw new SemanticException("Return statement type " + t + " does not match function return type " + currentFunctionType, s.lineNumber, s.offset);
 		return(s.e.accept(this));
 	}

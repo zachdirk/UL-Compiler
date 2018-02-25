@@ -6,5 +6,6 @@ ulGrammar.tokens
 ulGrammarLexer.java
 ulGrammarParser.java
 ulGrammar__.g
-setup.sh
 *~
+*.sh
+withoutSubtypes/
