@@ -5,6 +5,8 @@ public class ParenExpression extends Expression {
 
 	public ParenExpression (Expression e){
 		expr = e;
+		this.lineNumber = expr.lineNumber;
+		this.offset = expr.offset;
 	}
 
 	public Type accept(Visitor v){

@@ -7,6 +7,8 @@ public class SubtractExpression extends Expression {
 	public SubtractExpression (Expression e1, Expression e2){
 		expr1 = e1;
 		expr2 = e2;
+		this.lineNumber = expr1.lineNumber;
+		this.offset = expr1.offset;
 	}
 
 

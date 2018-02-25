@@ -2,14 +2,12 @@ package AST;
 import Type.*;
 public class ArrayReference extends Expression{
 	Identifier id;
-	IntegerLiteral i;
-	public ArrayReference(Identifier id, IntegerLiteral i){
+	Expression e;
+	public ArrayReference(Identifier id, Expression e){
 		this.id = id;
-		this.i = i;
-	}
-	public String toString(){
-		String s = id.toString() + "[" + i.toString() + "]";
-		return(s);
+		this.e = e;
+		this.lineNumber = id.lineNumber;
+		this.offset = id.offset;
 	}
 
 	public Type accept(Visitor v){

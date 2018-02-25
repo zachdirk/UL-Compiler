@@ -6,6 +6,8 @@ public class PrintLnStatement extends Statement{
 
 	public PrintLnStatement(Expression e){
 		this.e = e;
+		this.lineNumber = e.lineNumber;
+		this.offset = e.offset;
 	}	
 
 	public String toString(){

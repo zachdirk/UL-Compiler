@@ -14,6 +14,11 @@ public class Identifier extends ASTNode {
 		return id;
 	}
 
+	public boolean idEquals(Identifier other){
+		System.out.println(this.id + " ?= " + other.id + " = " + this.id.equals(other.id));
+		return (this.id.equals(other.id));
+	}
+
 	public Type accept(Visitor v){
 		return(v.visit(this));
 	}

@@ -6,6 +6,8 @@ public class ReturnStatement extends Statement{
 	
 	public ReturnStatement(Expression e){
 		this.e = e;
+		this.lineNumber = e.lineNumber;
+		this.offset = e.offset;
 	}
 
 	public Type accept(Visitor v){

@@ -194,7 +194,7 @@ atom returns [Expression e]
 		;
 
 arrayReference returns [ArrayReference e]
-		: i=id '[' intlit=intLiteral ']' {e = new ArrayReference(i, intlit);}
+		: i=id '[' e2=expr ']' {e = new ArrayReference(i, e2);}
 		;
 
 functionCall returns [FunctionCall f]
@@ -230,7 +230,7 @@ id returns [Identifier i]
 		;
 
 idVal returns [Expression e]
-		: e2=ID {e = new IdentifierValue($e2.text);}
+		: e2=ID {e = new IdentifierValue($e2.text, $e2.line, $e2.pos);}
 		;
 
 intLiteral returns [IntegerLiteral l]

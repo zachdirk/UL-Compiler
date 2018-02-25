@@ -3,7 +3,7 @@ import AST.*;
 public class ArrayType extends Type {
 
 	Type t;
-	IntegerLiteral i;
+	public IntegerLiteral i;
 	public ArrayType (){
 	
 	}

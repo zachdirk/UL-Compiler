@@ -6,6 +6,8 @@ public class FormalParameter extends ASTNode {
 	public FormalParameter(Type t, Identifier id){
 		this.t = t;
 		this.id = id;
+		this.lineNumber = id.lineNumber;
+		this.offset = id.offset;
 	}
 	
 	public Type accept(Visitor v){

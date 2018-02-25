@@ -50,13 +50,13 @@ public class ListEnvironment<K,V> implements Environment<K,V>
 	public V lookup(K key)
 	{
 		ListNode n = head.next;
-		while (n.key != key){
-			n = n.next;
-			if (n == null){
-				return null;
+		while (n.key != null){
+			if (n.key.equals(key)){
+				return (V)n.value;
 			}
+			n = n.next;
 		}
-		return (V)n.value;
+		return null;
 	}
 
 	public String toString()

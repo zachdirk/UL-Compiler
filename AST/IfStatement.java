@@ -8,6 +8,8 @@ public class IfStatement extends Statement{
 		condition = e;
 		this.b1=b1;
 		this.b2=b2;
+		this.lineNumber = condition.lineNumber;
+		this.offset = condition.offset;
 	}
 
 	public Type accept(Visitor v){

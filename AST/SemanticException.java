@@ -6,8 +6,8 @@ public class SemanticException extends RuntimeException{
 	public SemanticException(){
 
 	}
-	public SemanticException(String msg){	
-		this.msg = msg;	
+	public SemanticException(String msg, int lineNumber, int offset){
+		this.msg = "Error:" + lineNumber + ": " + msg + " (" + lineNumber + ", " + offset + ")";	
 	}
 	public String getMessage(){
 		return(msg);

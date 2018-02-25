@@ -8,6 +8,8 @@ public class VariableDeclaration extends ASTNode {
 	public VariableDeclaration (Type t, Identifier id){
 		this.t = t;
 		this.id = id;
+		this.lineNumber = id.lineNumber;
+		this.offset = id.offset;
 	}
 
 	public Type accept(Visitor v){
