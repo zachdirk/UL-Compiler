@@ -8,4 +8,5 @@ ulGrammarParser.java
 ulGrammar__.g
 *~
 *.sh
+withSubtypes/
 withoutSubtypes/
