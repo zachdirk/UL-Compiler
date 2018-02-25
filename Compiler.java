@@ -11,14 +11,19 @@ import AST.*;
 import Type.*;
 public class Compiler {
 	public static void main (String[] args) throws Exception {
-		ANTLRInputStream input;
+		ANTLRInputStream input = null;
 
 		if (args.length == 0 ) {
 			System.out.println("Usage: Test filename.ul");
 			return;
 		}
 		else {
-			input = new ANTLRInputStream(new FileInputStream(args[0]));
+			try{
+				input = new ANTLRInputStream(new FileInputStream(args[0]));
+			} catch(FileNotFoundException e){
+				System.out.println("File " + args[0] + " not found. Exiting.");
+				System.exit(1);
+			}
 		}
 
 		// The name of the grammar here is "ulNoActions",

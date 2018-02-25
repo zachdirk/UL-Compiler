@@ -5,6 +5,7 @@ To evoke the pretty printer, add the -pp flag e.g.: "java Compiler [filename] -p
 You can redirect the pretty printer output to a file for easy comparison like so "java Compiler [filename] -pp > output.txt"
 
 Notes for Assignment 2:
+ - The error for the empty file reports both a SemanticException (from my Semantic checker) as well as an ANTLR error - I can't figure out how to disable the ANTLR error.
  - I have implemented "subtyping" for integers and floats in such a way that floats and integers can be used interchangeably. Because explicit casting doesn't exist, I have allowed for assigning floats to integers. As a result, test cases wSt_3.1.5_invalid.ul, wSt_3.1.6_invalid.ul, wSt_3.2.2.a_invalid.ul, and wSt_3.3.b_invalid.ul are actually all valid for me. In later assignments this will translate to floats being truncated to integers (e.g. int a = 3.5 -> a = 3).
  - I have added implicit type casting for string concatenation, meaning the following expressions are valid: 
 	String + Int
