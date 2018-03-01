@@ -32,6 +32,8 @@ public class Compiler {
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		ulGrammarParser parser = new ulGrammarParser(tokens);
 		Program program = null;
+		boolean pretty_print = false;
+		boolean optimization = false;
 		Visitor print = new PrintVisitor();
 		Visitor semantic = new SemanticVisitor();
 		try {
@@ -49,11 +51,16 @@ public class Compiler {
 		}
 		if (program != null){
 			if (args.length > 1) {
-				if (args[1].equals("-pp")){
-					program.accept(print);
+				for (String s: args){
+					if (s.equals("-pp"))
+						pretty_print = true;
+					if (s.equals("-o"))
+						optimization = true;
 				}
 			}
 			try{
+				if (pretty_print)
+					program.accept(print);
 				program.accept(semantic);
 			}catch (SemanticException e){
 				System.out.println(e);
