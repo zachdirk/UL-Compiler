@@ -21,7 +21,7 @@ public class Compiler {
 			try{
 				input = new ANTLRInputStream(new FileInputStream(args[0]));
 			} catch(FileNotFoundException e){
-				System.out.println("File " + args[0] + " not found. Exiting.");
+				System.out.println("File \"" + args[0] + "\" not found. Exiting.");
 				System.exit(1);
 			}
 		}
