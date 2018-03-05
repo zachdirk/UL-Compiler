@@ -1,5 +1,5 @@
 package AST;
 public class ASTNode {
-	int lineNumber;
-	int offset;
+	public int lineNumber;
+	public int offset;
 }

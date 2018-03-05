@@ -1,8 +1,10 @@
 package AST;
 import Type.*;
+import Temp.*;
+import Visitor.*;
 public class ArrayReference extends Expression{
-	Identifier id;
-	Expression e;
+	public Identifier id;
+	public Expression e;
 	public ArrayReference(Identifier id, Expression e){
 		this.id = id;
 		this.e = e;
@@ -10,7 +12,15 @@ public class ArrayReference extends Expression{
 		this.offset = id.offset;
 	}
 
-	public Type accept(Visitor v){
+	public void acceptPrint(PrintVisitor v){
+		v.visit(this);
+	}
+
+	public Type acceptSemantic(SemanticVisitor v){
+		return(v.visit(this));
+	}
+
+	public Temp acceptTemp(TempVisitor v){
 		return(v.visit(this));
 	}
 }

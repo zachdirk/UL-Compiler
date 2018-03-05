@@ -1,8 +1,10 @@
 package AST;
 import Type.*;
+import Temp.*;
+import Visitor.*;
 public class Identifier extends ASTNode {
 	
-	String id;
+	public String id;
 		
 	public Identifier(String id, int lineNumber, int offset){
 		this.id = id;
@@ -19,7 +21,15 @@ public class Identifier extends ASTNode {
 		return (this.id.equals(other.id));
 	}
 
-	public Type accept(Visitor v){
+	public void acceptPrint(PrintVisitor v){
+		v.visit(this);
+	}
+
+	public Type acceptSemantic(SemanticVisitor v){
+		return(v.visit(this));
+	}
+
+	public Temp acceptTemp(TempVisitor v){
 		return(v.visit(this));
 	}
 

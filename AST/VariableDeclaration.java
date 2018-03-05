@@ -1,9 +1,11 @@
 package AST;
 import Type.*;
+import Temp.*;
+import Visitor.*;
 public class VariableDeclaration extends ASTNode {
 
-	Type t;
-	Identifier id;
+	public Type t;
+	public Identifier id;
 
 	public VariableDeclaration (Type t, Identifier id){
 		this.t = t;
@@ -12,7 +14,15 @@ public class VariableDeclaration extends ASTNode {
 		this.offset = id.offset;
 	}
 
-	public Type accept(Visitor v){
+	public void acceptPrint(PrintVisitor v){
+		v.visit(this);
+	}
+
+	public Type acceptSemantic(SemanticVisitor v){
+		return(v.visit(this));
+	}
+
+	public Temp acceptTemp(TempVisitor v){
 		return(v.visit(this));
 	}
 

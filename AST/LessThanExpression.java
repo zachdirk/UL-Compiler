@@ -1,8 +1,10 @@
 package AST;
 import Type.*;
+import Temp.*;
+import Visitor.*;
 public class LessThanExpression extends Expression {
-	Expression expr1;
-	Expression expr2;
+	public Expression expr1;
+	public Expression expr2;
 
 	public LessThanExpression (Expression e1, Expression e2){
 		expr1 = e1;
@@ -11,7 +13,15 @@ public class LessThanExpression extends Expression {
 		this.offset = expr1.offset;
 	}
 
-	public Type accept(Visitor v){
+	public void acceptPrint(PrintVisitor v){
+		v.visit(this);
+	}
+
+	public Type acceptSemantic(SemanticVisitor v){
+		return(v.visit(this));
+	}
+
+	public Temp acceptTemp(TempVisitor v){
 		return(v.visit(this));
 	}
 

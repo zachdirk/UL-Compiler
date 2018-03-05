@@ -1,8 +1,10 @@
 package AST;
 import java.util.Vector;
 import Type.*;
+import Temp.*;
+import Visitor.*;
 public class Program extends ASTNode {
-	Vector<Function> functionList;
+	public Vector<Function> functionList;
 	
 	public Program (){
 		functionList = new Vector<Function>();
@@ -20,7 +22,15 @@ public class Program extends ASTNode {
 		return functionList.size();
 	}
 
-	public Type accept(Visitor v){
+	public void acceptPrint(PrintVisitor v){
+		v.visit(this);
+	}
+
+	public Type acceptSemantic(SemanticVisitor v){
+		return(v.visit(this));
+	}
+
+	public Temp acceptTemp(TempVisitor v){
 		return(v.visit(this));
 	}
 

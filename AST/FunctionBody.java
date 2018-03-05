@@ -1,11 +1,12 @@
 package AST;
 import java.util.Vector;
 import Type.*;
-
+import Temp.*;
+import Visitor.*;
 public class FunctionBody extends ASTNode {
 	
-	Vector<VariableDeclaration> varDecls;
-	Vector<Statement> statements;
+	public Vector<VariableDeclaration> varDecls;
+	public Vector<Statement> statements;
 
 	public FunctionBody(){
 		varDecls = new Vector<VariableDeclaration>();
@@ -36,7 +37,15 @@ public class FunctionBody extends ASTNode {
 		return varDecls.size();
 	}
 
-	public Type accept(Visitor v){
+	public void acceptPrint(PrintVisitor v){
+		v.visit(this);
+	}
+
+	public Type acceptSemantic(SemanticVisitor v){
+		return(v.visit(this));
+	}
+
+	public Temp acceptTemp(TempVisitor v){
 		return(v.visit(this));
 	}
 

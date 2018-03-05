@@ -1,9 +1,11 @@
 package AST;
 import Type.*;
+import Temp.*;
+import Visitor.*;
 public class BooleanLiteral extends Expression{
-	boolean b;
-	int lineNumber;
-	int offset;
+	public boolean b;
+	public int lineNumber;
+	public int offset;
 
 	public BooleanLiteral(boolean b, int lineNumber, int offset){
 		this.b = b;
@@ -19,7 +21,15 @@ public class BooleanLiteral extends Expression{
 		return(s);
 	}
 
-	public Type accept(Visitor v){
+	public void acceptPrint(PrintVisitor v){
+		v.visit(this);
+	}
+
+	public Type acceptSemantic(SemanticVisitor v){
+		return(v.visit(this));
+	}
+
+	public Temp acceptTemp(TempVisitor v){
 		return(v.visit(this));
 	}
 }

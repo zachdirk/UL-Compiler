@@ -1,9 +1,11 @@
 package AST;
 import Type.*;
 import java.util.Vector;
+import Temp.*;
+import Visitor.*;
 public class FormalParameterList extends ASTNode {
 	
-	Vector<FormalParameter> parameterList;
+	public Vector<FormalParameter> parameterList;
 
 	public FormalParameterList(){
 		parameterList = new Vector<FormalParameter>();
@@ -22,7 +24,15 @@ public class FormalParameterList extends ASTNode {
 	}
 
 
-	public Type accept(Visitor v){
+	public void acceptPrint(PrintVisitor v){
+		v.visit(this);
+	}
+
+	public Type acceptSemantic(SemanticVisitor v){
+		return(v.visit(this));
+	}
+
+	public Temp acceptTemp(TempVisitor v){
 		return(v.visit(this));
 	}
 

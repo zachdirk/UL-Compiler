@@ -1,5 +1,7 @@
 package Type;
 import AST.*;
+import Visitor.*;
+import Temp.*;
 public class FloatType extends Type{
 	public FloatType() {
 
@@ -14,7 +16,13 @@ public class FloatType extends Type{
 	public boolean equals (Object o) {
 		return (o instanceof FloatType);
 	}
-	public Type accept (Visitor v){
+	public void acceptPrint(PrintVisitor v){
+		v.visit(this);
+	}
+	public Type acceptSemantic(SemanticVisitor v){
+		return(v.visit(this));
+	}
+	public Temp acceptTemp(TempVisitor v){
 		return(v.visit(this));
 	}
 }

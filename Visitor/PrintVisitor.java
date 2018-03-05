@@ -1,7 +1,8 @@
-package AST;
+package Visitor;
 import java.util.Vector;
 import Type.*;
-public class PrintVisitor implements Visitor{
+import AST.*;
+public class PrintVisitor{
 	
 	private int indent;
 	
@@ -16,263 +17,225 @@ public class PrintVisitor implements Visitor{
 		}
 		return(s);
 	}	
-	public Type visit(AddExpression e){
-		System.out.print(e.expr1 + "+" + e.expr2);
-		return null;	
+	public void visit(AddExpression e){
+		System.out.print(e.expr1 + "+" + e.expr2);	
 	}
-	public Type visit(ArrayType t){
+	public void visit(ArrayType t){
 		System.out.print(t);
-		return null;
 	}
-	public Type visit(ArrayAssignment a){
+	public void visit(ArrayAssignment a){
 		System.out.print("\n" + tabs());		
-		a.id.accept(this);
+		a.id.acceptPrint(this);
 		System.out.print("[");
-		a.index.accept(this);
+		a.index.acceptPrint(this);
 		System.out.print("]=");
-		a.e.accept(this);
+		a.e.acceptPrint(this);
 		System.out.print(";");
-		return null;
 	}
-	public Type visit(ArrayReference a){
+	public void visit(ArrayReference a){
 		System.out.print(a);
-		return null;
 	}
-	public Type visit(AssignmentStatement a){
+	public void visit(AssignmentStatement a){
 		System.out.print("\n" + tabs());
-		a.id.accept(this);
+		a.id.acceptPrint(this);
 		System.out.print("=");
-		a.expr.accept(this);
+		a.expr.acceptPrint(this);
 		System.out.print(";");
-		return null;
 	}
-	public Type visit(Block b){
+	public void visit(Block b){
 		System.out.print(tabs() + "{");
 		indent++;
 		Statement s = null;
 		for (int i = 0; i < b.size(); i++){
 			s = b.elementAt(i);
-			s.accept(this);
+			s.acceptPrint(this);
 		}
 		indent--;
 		System.out.print("\n" + tabs() + "}");
-		return null;
 	}
-	public Type visit(BooleanLiteral e){
+	public void visit(BooleanLiteral e){
 		System.out.print(e);
-		return null;
 	}
-	public Type visit(BooleanType t){
+	public void visit(BooleanType t){
 		System.out.print(t);
-		return null;
 	}
-	public Type visit(CharacterLiteral e){
+	public void visit(CharacterLiteral e){
 		System.out.print(e);
-		return null;
 	}
-	public Type visit(CharType t){
+	public void visit(CharType t){
 		System.out.print(t);
-		return null;
 	}
-	public Type visit(EqualityExpression e){
+	public void visit(EqualityExpression e){
 		System.out.print(e.expr1 + "==" + e.expr2);
-		return null;
 	}
-	public Type visit(ExpressionStatement e){
+	public void visit(ExpressionStatement e){
 		System.out.print("\n" + tabs());		
-		e.e.accept(this);
+		e.e.acceptPrint(this);
 		System.out.print(";");
-		return null;
 	}
-	public Type visit(FloatLiteral e){
+	public void visit(FloatLiteral e){
 		System.out.print(e);
-		return null;
 	}
-	public Type visit(FloatType t){
+	public void visit(FloatType t){
 		System.out.print(t);
-		return null;
 	}
-	public Type visit(FormalParameter p){
-		p.t.accept(this);
+	public void visit(FormalParameter p){
+		p.t.acceptPrint(this);
 		System.out.print(" ");
-		p.id.accept(this);
-		return null;
+		p.id.acceptPrint(this);
 	}
-	public Type visit(FormalParameterList p){
+	public void visit(FormalParameterList p){
 		System.out.print("(");
 		Vector params = p.parameterList;
 		FormalParameter fp;
 		if (params.size() > 0){
 			fp = (FormalParameter)params.get(0);
-			fp.accept(this);
+			fp.acceptPrint(this);
 		}
 		for (int i = 1; i < params.size(); i++){
 			System.out.print(", ");
 			fp = (FormalParameter)params.get(i);
-			fp.accept(this);
+			fp.acceptPrint(this);
 		}
 		System.out.print(")");
-		return null;
 	}
-	public Type visit(FunctionBody f){
+	public void visit(FunctionBody f){
 		System.out.print("\n{");
 		indent++;
 		Vector v = f.varDecls;
 		if (v.size() > 0){
 			VariableDeclaration vd = (VariableDeclaration)v.get(0);
-			vd.accept(this);
+			vd.acceptPrint(this);
 		}
 		for (int i = 1; i < v.size(); i++){
 			VariableDeclaration vd = (VariableDeclaration)v.get(i);
-			vd.accept(this);
+			vd.acceptPrint(this);
 		}
 		if (v.size() > 0)		
 			System.out.println(); //if there were vardecls we have to separate them from statements
 		v = f.statements;
 		if (v.size() > 0){
 			Statement s = (Statement)v.get(0);
-			s.accept(this);
+			s.acceptPrint(this);
 		}
 		for (int i = 1; i < v.size(); i++){
 			Statement s = (Statement)v.get(i);
-			s.accept(this);
+			s.acceptPrint(this);
 		} 
 		System.out.println("\n}");
 		indent--;	
-		return null;
 	}
-	public Type visit(FunctionCall f){
-		f.id.accept(this);
+	public void visit(FunctionCall f){
+		f.id.acceptPrint(this);
 		System.out.print("(");
 		if (f.v.size() > 0) {
 			Expression e = (Expression)f.v.get(0);
-			e.accept(this);
+			e.acceptPrint(this);
 		}
 		for (int i = 1; i < f.v.size(); i++){
 			System.out.print(",");
 			Expression e = (Expression)f.v.get(i);
-			e.accept(this);
+			e.acceptPrint(this);
 			
 		}
 		System.out.print(")");
-		return null;
 	}
-	public Type visit(FunctionDeclaration f){
-		f.t.accept(this);
+	public void visit(FunctionDeclaration f){
+		f.t.acceptPrint(this);
 		System.out.print(" ");
-		f.id.accept(this);
+		f.id.acceptPrint(this);
 		System.out.print(" ");
-		f.fpl.accept(this);	
-		return null;
+		f.fpl.acceptPrint(this);	
 	}
-	public Type visit(Function f){
-		f.fd.accept(this);
-		f.fb.accept(this);
-		return null;
+	public void visit(Function f){
+		f.fd.acceptPrint(this);
+		f.fb.acceptPrint(this);
 	}
-	public Type visit(Identifier id){
+	public void visit(Identifier id){
 		System.out.print(id.id);
-		return null;
 	}
-	public Type visit(IdentifierValue id){
+	public void visit(IdentifierValue id){
 		System.out.print(id.id);
-		return null;
 	}
-	public Type visit(IfStatement s){
+	public void visit(IfStatement s){
 		System.out.print("\n" + tabs() + "if (");
-		s.condition.accept(this);
+		s.condition.acceptPrint(this);
 		System.out.print(")\n");
-		s.b1.accept(this);
+		s.b1.acceptPrint(this);
 		if (s.b2 != null){
 			System.out.print("\n" + tabs() + "else\n");
-			s.b2.accept(this);
+			s.b2.acceptPrint(this);
 		}
-		return null;
 	}
-	public Type visit(IntegerLiteral i){
+	public void visit(IntegerLiteral i){
 		System.out.print(i);
-		return null;
 	}
-	public Type visit(IntegerType t){
+	public void visit(IntegerType t){
 		System.out.print(t);
-		return null;
 	}
-	public Type visit(LessThanExpression e){
+	public void visit(LessThanExpression e){
 		System.out.print(e.expr1 + "<" + e.expr2);
-		return null;
 	}
-	public Type visit(MultExpression e){
+	public void visit(MultExpression e){
 		System.out.print(e.expr1 + "*" + e.expr2);
-		return null;
 	}
-	public Type visit(ParenExpression e){
+	public void visit(ParenExpression e){
 		System.out.print("(" + e.expr + ")");
-		return null;
 	}
-	public Type visit(PrintStatement s){
+	public void visit(PrintStatement s){
 		System.out.print("\n" + tabs() + "print ");
-		s.e.accept(this);
+		s.e.acceptPrint(this);
 		System.out.print(";");
-		return null;
 	}
-	public Type visit(PrintLnStatement s){
+	public void visit(PrintLnStatement s){
 		System.out.print("\n" + tabs() + "println ");
-		s.e.accept(this);
+		s.e.acceptPrint(this);
 		System.out.print(";");
-		return null;
 	}
-	public Type visit(Program p){
+	public void visit(Program p){
 		Vector v = p.functionList;
 		Function f;		
 		if (v.size() > 0){
 			f = (Function)v.get(0);
-			f.accept(this);
+			f.acceptPrint(this);
 		}
 		for (int i = 1; i < v.size(); i++){
 			System.out.println();
 			f = (Function)v.get(i);			
-			f.accept(this);
+			f.acceptPrint(this);
 		}
-		return null;
 	}
-	public Type visit(ReturnStatement s){
+	public void visit(ReturnStatement s){
 		System.out.print("\n" + tabs() + "return");
 		if (s.e != null){
 			System.out.print(" ");
-			s.e.accept(this);
+			s.e.acceptPrint(this);
 		}
 		System.out.print(";");
-		return null;
 	}
-	public Type visit(StringLiteral s){
+	public void visit(StringLiteral s){
 		System.out.print(s);
-		return null;
 	}
-	public Type visit(SubtractExpression e){
+	public void visit(SubtractExpression e){
 		System.out.print(e.expr1 + "-" + e.expr2);
-		return null;
 	}
-	public Type visit(StringType t){
+	public void visit(StringType t){
 		System.out.print(t);
-		return null;
 	}
-	public Type visit(VariableDeclaration s){
+	public void visit(VariableDeclaration s){
 		System.out.print("\n" + tabs());
-		s.t.accept(this);
+		s.t.acceptPrint(this);
 		System.out.print(" ");
-		s.id.accept(this);
+		s.id.acceptPrint(this);
 		System.out.print(";");
-		return null;
 	}
-	public Type visit(VoidType t){
+	public void visit(VoidType t){
 		System.out.print(t);
-		return null;
 	}
-	public Type visit(WhileStatement s){
+	public void visit(WhileStatement s){
 		System.out.print("\n" + tabs() + "while (");
-		s.condition.accept(this);
+		s.condition.acceptPrint(this);
 		System.out.print(")\n");
-		s.b.accept(this);
-		return null;
+		s.b.acceptPrint(this);
 	}
 }

@@ -1,8 +1,9 @@
-package AST;
+package Visitor;
 import java.util.Vector;
+import AST.*;
 import Type.*;
 import Environment.*;
-public class SemanticVisitor implements Visitor{
+public class SemanticVisitor{
 
 	ListEnvironment<String, FunctionDeclaration> fEnv;
 	ListEnvironment<String, Type> vEnv;
@@ -18,8 +19,8 @@ public class SemanticVisitor implements Visitor{
 	}
 
 	public Type visit(AddExpression e){
-		Type t1 = e.expr1.accept(this);
-		Type t2 = e.expr2.accept(this);
+		Type t1 = e.expr1.acceptSemantic(this);
+		Type t2 = e.expr2.acceptSemantic(this);
 		if (t1 instanceof StringType){
 			if (t2 instanceof VoidType)
 				throw new SemanticException("Type mismatch on addition expression: " + t1 + " and " + t2, e.lineNumber, e.offset);
@@ -41,7 +42,7 @@ public class SemanticVisitor implements Visitor{
 		return null;
 	}
 	public Type visit(ArrayReference a){
-		Type t = a.e.accept(this);
+		Type t = a.e.acceptSemantic(this);
 		if (!(t instanceof IntegerType))
 			throw new SemanticException("Array index has invalid type " + t + ". Index must be of type integer.", a.lineNumber, a.offset);
 		return t;
@@ -50,7 +51,7 @@ public class SemanticVisitor implements Visitor{
 		if (!vEnv.inCurrentScope(a.id.id))
 			throw new SemanticException("Variable \"" + a.id.id + "\" undefined.", a.lineNumber, a.offset);
 		Type t1 = vEnv.lookup(a.id.id);
-		Type t2 = a.expr.accept(this);
+		Type t2 = a.expr.acceptSemantic(this);
 		if (t1 instanceof ArrayType){
 			ArrayType a1 = (ArrayType)t1;
 			ArrayType a2 = (ArrayType)t2;			
@@ -84,8 +85,8 @@ public class SemanticVisitor implements Visitor{
 		return t;
 	}
 	public Type visit(EqualityExpression e){
-		Type t1 = e.expr1.accept(this);
-		Type t2 = e.expr2.accept(this);
+		Type t1 = e.expr1.acceptSemantic(this);
+		Type t2 = e.expr2.acceptSemantic(this);
 		if (!t1.getClass().equals(t2.getClass())){
 			if ((t1 instanceof IntegerType && t2 instanceof FloatType) || (t1 instanceof FloatType && t2 instanceof IntegerType))
 				return new BooleanType();
@@ -94,7 +95,7 @@ public class SemanticVisitor implements Visitor{
 		return new BooleanType();
 	}
 	public Type visit(ExpressionStatement e){
-		Type t = e.e.accept(this);
+		Type t = e.e.acceptSemantic(this);
 		return t;
 	}
 	public Type visit(FloatLiteral e){
@@ -116,7 +117,7 @@ public class SemanticVisitor implements Visitor{
 		FormalParameter fp;
 		for (int i = 0; i < params.size(); i++){
 			fp = (FormalParameter)params.get(i);
-			fp.accept(this);
+			fp.acceptSemantic(this);
 		}
 		return null;
 	}
@@ -125,13 +126,13 @@ public class SemanticVisitor implements Visitor{
 		VariableDeclaration vd;
 		for (int i = 0; i < v.size(); i++){
 			vd = (VariableDeclaration)v.get(i);
-			vd.accept(this);
+			vd.acceptSemantic(this);
 		}
 		Vector sList = f.statements;
 		Statement s;
 		for (int i = 0; i < sList.size(); i++){
 			s = (Statement)sList.get(i);
-			s.accept(this);
+			s.acceptSemantic(this);
 		}
 		return null;
 	}
@@ -145,7 +146,7 @@ public class SemanticVisitor implements Visitor{
 		if (v.size() != v2.size())
 			throw new SemanticException("Function call to \"" + id + "\" has " + v.size() + " parameters, expected " + v2.size(), f.lineNumber, f.offset);
 		for (int i = 0; i < v.size(); i++){
-			Type t1 = (((Expression)v.get(i)).accept(this));
+			Type t1 = (((Expression)v.get(i)).acceptSemantic(this));
 			Type t2 = ((FormalParameter)v2.get(i)).t;
 			if (!t1.getClass().equals(t2.getClass())){
 				if (!((t1 instanceof IntegerType && t2 instanceof FloatType) || (t1 instanceof FloatType && t2 instanceof IntegerType)))
@@ -166,14 +167,14 @@ public class SemanticVisitor implements Visitor{
 			if (f.fpl.parameterList.size() > 0)
 				throw new SemanticException("Main function must not take any arguments.", f.lineNumber, f.offset);
 		}
-		f.fpl.accept(this);
+		f.fpl.acceptSemantic(this);
 		return(t);
 	}
 	public Type visit(Function f){
 		vEnv.beginScope();
 		Type t = null;
-		t = f.fd.accept(this);
-		f.fb.accept(this);		
+		t = f.fd.acceptSemantic(this);
+		f.fb.acceptSemantic(this);		
 		vEnv.endScope();
 		return(t);
 	}
@@ -186,12 +187,12 @@ public class SemanticVisitor implements Visitor{
 		return (vEnv.lookup(id.id));
 	}
 	public Type visit(IfStatement s){
-		Type t = s.condition.accept(this);
+		Type t = s.condition.acceptSemantic(this);
 		if (!(t instanceof BooleanType))
 			throw new SemanticException("If statement condition must have type boolean, found " + t, s.lineNumber, s.offset);
-		s.b1.accept(this);
+		s.b1.acceptSemantic(this);
 		if (s.b2 != null)
-			s.b2.accept(this);
+			s.b2.acceptSemantic(this);
 		return t;
 	}
 	public Type visit(IntegerLiteral i){
@@ -201,8 +202,8 @@ public class SemanticVisitor implements Visitor{
 		return t;
 	}
 	public Type visit(LessThanExpression e){
-		Type t1 = e.expr1.accept(this);
-		Type t2 = e.expr2.accept(this);
+		Type t1 = e.expr1.acceptSemantic(this);
+		Type t2 = e.expr2.acceptSemantic(this);
 		if (!t1.getClass().equals(t2.getClass())){
 			if ((t1 instanceof IntegerType && t2 instanceof FloatType) || (t1 instanceof FloatType && t2 instanceof IntegerType))
 				return new BooleanType();
@@ -211,8 +212,8 @@ public class SemanticVisitor implements Visitor{
 		return new BooleanType();
 	}
 	public Type visit(MultExpression e){
-		Type t1 = e.expr1.accept(this);
-		Type t2 = e.expr2.accept(this);
+		Type t1 = e.expr1.acceptSemantic(this);
+		Type t2 = e.expr2.acceptSemantic(this);
 		if (!t1.getClass().equals(t2.getClass())){
 			if ((t1 instanceof IntegerType && t2 instanceof FloatType) || (t1 instanceof FloatType && t2 instanceof IntegerType))
 				return new FloatType();
@@ -233,17 +234,17 @@ public class SemanticVisitor implements Visitor{
 		return t1;
 	}
 	public Type visit(ParenExpression e){
-		Type t = e.expr.accept(this);
+		Type t = e.expr.acceptSemantic(this);
 		return t;
 	}
 	public Type visit(PrintStatement s){
-		Type t = s.e.accept(this);
+		Type t = s.e.acceptSemantic(this);
 		if (t instanceof VoidType)
 			throw new SemanticException("Cannot print expression of type Void", s.lineNumber, s.offset);
 		return(t);
 	}
 	public Type visit(PrintLnStatement s){
-		Type t = s.e.accept(this);
+		Type t = s.e.acceptSemantic(this);
 		if (t instanceof VoidType)
 			throw new SemanticException("Cannot print expression of type Void", s.lineNumber, s.offset);
 		return(t);
@@ -262,7 +263,7 @@ public class SemanticVisitor implements Visitor{
 		}
 		for (int i = 0; i < v.size(); i++){
 			f = (Function)v.get(i);
-			f.accept(this);
+			f.acceptSemantic(this);
 		}
 		if (!fEnv.inCurrentScope("main")) 
 			throw new SemanticException("Program must have a main function.", 0, 0);
@@ -270,7 +271,7 @@ public class SemanticVisitor implements Visitor{
 		return null;
 	}
 	public Type visit(ReturnStatement s){
-		Type t1 = s.e.accept(this);
+		Type t1 = s.e.acceptSemantic(this);
 		Type t2 = currentFunctionType;
 		if (!t1.getClass().equals(t2.getClass())){
 			if ((t1 instanceof IntegerType && t2 instanceof FloatType) || (t1 instanceof FloatType && t2 instanceof IntegerType))
@@ -283,8 +284,8 @@ public class SemanticVisitor implements Visitor{
 		return new StringType();
 	}
 	public Type visit(SubtractExpression e){
-		Type t1 = e.expr1.accept(this);
-		Type t2 = e.expr2.accept(this);
+		Type t1 = e.expr1.acceptSemantic(this);
+		Type t2 = e.expr2.acceptSemantic(this);
 		if (!t1.getClass().equals(t2.getClass())){
 			if ((t1 instanceof IntegerType && t2 instanceof FloatType) || (t1 instanceof FloatType && t2 instanceof IntegerType))
 				return new FloatType();
@@ -311,10 +312,10 @@ public class SemanticVisitor implements Visitor{
 		return t;
 	}
 	public Type visit(WhileStatement s){
-		Type t = s.condition.accept(this);
+		Type t = s.condition.acceptSemantic(this);
 		if (!(t instanceof BooleanType))
 			throw new SemanticException("While statement condition must have type boolean, found " + t, s.lineNumber, s.offset);
-		s.b.accept(this);
+		s.b.acceptSemantic(this);
 		return t;
 	}
 

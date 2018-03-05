@@ -1,7 +1,9 @@
 package AST;
+import Temp.*;
+import Visitor.*;
 public class SemanticException extends RuntimeException{
 
-	String msg;	
+	public String msg;	
 		
 	public SemanticException(){
 

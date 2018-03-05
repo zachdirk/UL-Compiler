@@ -1,7 +1,11 @@
 package Type;
 import AST.*;
+import Visitor.*;
+import Temp.*;
 public abstract class Type{
-	public abstract Type accept (Visitor v);
+	public abstract void acceptPrint(PrintVisitor v);
+	public abstract Type acceptSemantic(SemanticVisitor v);
+	public abstract Temp acceptTemp(TempVisitor v);
 	public abstract boolean equals (Object o);
 
 	public int lineNumber;

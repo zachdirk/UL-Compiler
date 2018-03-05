@@ -1,9 +1,11 @@
 package AST;
 import Type.*;
 import java.util.Vector;
+import Temp.*;
+import Visitor.*;
 public class Block{
 
-	Vector<Statement> statements;
+	public Vector<Statement> statements;
 
 	public Block(){
 		statements = new Vector<Statement>();
@@ -20,7 +22,15 @@ public class Block{
 		return statements.size();
 	}
 
-	public Type accept(Visitor v){
+	public void acceptPrint(PrintVisitor v){
+		v.visit(this);
+	}
+
+	public Type acceptSemantic(SemanticVisitor v){
+		return(v.visit(this));
+	}
+
+	public Temp acceptTemp(TempVisitor v){
 		return(v.visit(this));
 	}
 }

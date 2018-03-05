@@ -1,9 +1,11 @@
 package AST;
 import Type.*;
+import Temp.*;
+import Visitor.*;
 public class Function extends ASTNode {
 
-	FunctionBody fb;
-	FunctionDeclaration fd;
+	public FunctionBody fb;
+	public FunctionDeclaration fd;
 
 	public Function(FunctionDeclaration fd, FunctionBody fb){
 		this.fb = fb;
@@ -12,7 +14,15 @@ public class Function extends ASTNode {
 		this.offset = fd.offset;
 	}
 
-	public Type accept(Visitor v){
+	public void acceptPrint(PrintVisitor v){
+		v.visit(this);
+	}
+
+	public Type acceptSemantic(SemanticVisitor v){
+		return(v.visit(this));
+	}
+
+	public Temp acceptTemp(TempVisitor v){
 		return(v.visit(this));
 	}
 

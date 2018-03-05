@@ -1,8 +1,10 @@
 package AST;
 import Type.*;
+import Temp.*;
+import Visitor.*;
 public class AssignmentStatement extends Statement{
-	Identifier id;
-	Expression expr;
+	public Identifier id;
+	public Expression expr;
 	
 	public AssignmentStatement (Identifier i, Expression e){
 		id = i;
@@ -11,7 +13,15 @@ public class AssignmentStatement extends Statement{
 		this.offset = id.offset;
 	}
 	
-	public Type accept(Visitor v){
+	public void acceptPrint(PrintVisitor v){
+		v.visit(this);
+	}
+
+	public Type acceptSemantic(SemanticVisitor v){
+		return(v.visit(this));
+	}
+
+	public Temp acceptTemp(TempVisitor v){
 		return(v.visit(this));
 	}
 }

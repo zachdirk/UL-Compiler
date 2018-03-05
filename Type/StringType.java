@@ -1,5 +1,7 @@
 package Type;
 import AST.*;
+import Visitor.*;
+import Temp.*;
 public class StringType extends Type {
 	public StringType (){
 		
@@ -14,7 +16,13 @@ public class StringType extends Type {
 	public boolean equals (Object o){
 		return (o instanceof StringType);
 	}
-	public Type accept (Visitor v){
+	public void acceptPrint(PrintVisitor v){
+		v.visit(this);
+	}
+	public Type acceptSemantic(SemanticVisitor v){
+		return(v.visit(this));
+	}
+	public Temp acceptTemp(TempVisitor v){
 		return(v.visit(this));
 	}
 }

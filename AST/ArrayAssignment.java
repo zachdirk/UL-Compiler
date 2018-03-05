@@ -1,10 +1,12 @@
 package AST;
 import Type.*;
+import Temp.*;
+import Visitor.*;
 public class ArrayAssignment extends Statement {
 	
-	Identifier id;
-	Expression index;
-	Expression e;
+	public Identifier id;
+	public Expression index;
+	public Expression e;
 
 	public ArrayAssignment(Identifier id, Expression index, Expression e){
 		this.id = id;
@@ -12,7 +14,15 @@ public class ArrayAssignment extends Statement {
 		this.e = e;	
 	}
 
-	public Type accept(Visitor v){
+	public void acceptPrint(PrintVisitor v){
+		v.visit(this);
+	}
+
+	public Type acceptSemantic(SemanticVisitor v){
+		return(v.visit(this));
+	}
+
+	public Temp acceptTemp(TempVisitor v){
 		return(v.visit(this));
 	}
 }

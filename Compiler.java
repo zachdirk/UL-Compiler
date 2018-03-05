@@ -9,6 +9,7 @@ import org.antlr.runtime.*;
 import java.io.*;
 import AST.*;
 import Type.*;
+import Visitor.*;
 public class Compiler {
 	public static void main (String[] args) throws Exception {
 		ANTLRInputStream input = null;
@@ -34,8 +35,8 @@ public class Compiler {
 		Program program = null;
 		boolean pretty_print = false;
 		boolean optimization = false;
-		Visitor print = new PrintVisitor();
-		Visitor semantic = new SemanticVisitor();
+		PrintVisitor print = new PrintVisitor();
+		SemanticVisitor semantic = new SemanticVisitor();
 		try {
 			program = parser.program();
 		}
@@ -60,8 +61,8 @@ public class Compiler {
 			}
 			try{
 				if (pretty_print)
-					program.accept(print);
-				program.accept(semantic);
+					program.acceptPrint(print);
+				program.acceptSemantic(semantic);
 			}catch (SemanticException e){
 				System.out.println(e);
 				System.exit(1);

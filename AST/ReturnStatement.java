@@ -1,8 +1,9 @@
 package AST;
-
+import Temp.*;
+import Visitor.*;
 import Type.*;
 public class ReturnStatement extends Statement{
-	Expression e;
+	public Expression e;
 	
 	public ReturnStatement(Expression e){
 		this.e = e;
@@ -10,7 +11,15 @@ public class ReturnStatement extends Statement{
 		this.offset = e.offset;
 	}
 
-	public Type accept(Visitor v){
+	public void acceptPrint(PrintVisitor v){
+		v.visit(this);
+	}
+
+	public Type acceptSemantic(SemanticVisitor v){
+		return(v.visit(this));
+	}
+
+	public Temp acceptTemp(TempVisitor v){
 		return(v.visit(this));
 	}
 

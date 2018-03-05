@@ -1,8 +1,10 @@
 package AST;
 import Type.*;
+import Temp.*;
+import Visitor.*;
 public class PrintStatement extends Statement{
 	
-	Expression e;
+	public Expression e;
 
 	public PrintStatement(Expression e){
 		this.e = e;
@@ -14,7 +16,15 @@ public class PrintStatement extends Statement{
 		return "print(" + e + ")";
 	}
 
-	public Type accept(Visitor v){
+	public void acceptPrint(PrintVisitor v){
+		v.visit(this);
+	}
+
+	public Type acceptSemantic(SemanticVisitor v){
+		return(v.visit(this));
+	}
+
+	public Temp acceptTemp(TempVisitor v){
 		return(v.visit(this));
 	}
 
