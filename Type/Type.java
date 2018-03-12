@@ -1,7 +1,7 @@
 package Type;
 import AST.*;
 import Visitor.*;
-import Temp.*;
+import IR.Temp.*;
 public abstract class Type{
 	public abstract void acceptPrint(PrintVisitor v);
 	public abstract Type acceptSemantic(SemanticVisitor v);

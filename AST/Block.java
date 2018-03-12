@@ -1,7 +1,7 @@
 package AST;
 import Type.*;
 import java.util.Vector;
-import Temp.*;
+import IR.Temp.*;
 import Visitor.*;
 public class Block{
 

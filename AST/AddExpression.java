@@ -1,6 +1,6 @@
 package AST;
 import Type.*;
-import Temp.*;
+import IR.Temp.*;
 import Visitor.*;
 public class AddExpression extends Expression {
 	public Expression expr1;

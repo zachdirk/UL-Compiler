@@ -1,7 +1,7 @@
 package Type;
 import AST.*;
 import Visitor.*;
-import Temp.*;
+import IR.Temp.*;
 public class IntegerType extends Type{
 	public IntegerType(){
 	

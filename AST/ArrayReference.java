@@ -1,6 +1,6 @@
 package AST;
 import Type.*;
-import Temp.*;
+import IR.Temp.*;
 import Visitor.*;
 public class ArrayReference extends Expression{
 	public Identifier id;

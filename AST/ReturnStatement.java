@@ -1,5 +1,5 @@
 package AST;
-import Temp.*;
+import IR.Temp.*;
 import Visitor.*;
 import Type.*;
 public class ReturnStatement extends Statement{

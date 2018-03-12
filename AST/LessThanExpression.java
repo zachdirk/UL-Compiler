@@ -1,6 +1,6 @@
 package AST;
 import Type.*;
-import Temp.*;
+import IR.Temp.*;
 import Visitor.*;
 public class LessThanExpression extends Expression {
 	public Expression expr1;

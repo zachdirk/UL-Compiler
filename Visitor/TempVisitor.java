@@ -1,10 +1,25 @@
 package Visitor;
 import java.util.Vector;
-import Temp.*;
+import IR.*;
+import IR.Temp.*;
 import AST.*;
 import Type.*;
+import Environment.*;
 public class TempVisitor{
-	public TempVisitor(){}
+
+	ListEnvironment<String, FunctionDeclaration> fEnv;
+	ListEnvironment<String, Temp> vEnv;
+
+	String currentFunction;
+	Type currentFunctionType;
+
+	public TempVisitor(){
+		fEnv = new ListEnvironment<String, FunctionDeclaration>();
+		vEnv = new ListEnvironment<String, Temp>();
+		currentFunction = null;
+		currentFunctionType = null;
+	
+	}
 		
 	public Temp visit(AddExpression e){
 		return null;

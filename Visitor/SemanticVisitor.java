@@ -38,7 +38,11 @@ public class SemanticVisitor{
 		return t;
 	}
 	public Type visit(ArrayAssignment a){
-		
+		if (!vEnv.inCurrentScope(a.id.id))
+			throw new SemanticException("Variable \"" + a.id.id + "\" undefined.", a.lineNumber, a.offset);
+		Type t1 = vEnv.lookup(a.id.id);
+		Type t2 = a.e.acceptSemantic(this);
+		Type index = a.index.acceptSemantic(this);	
 		return null;
 	}
 	public Type visit(ArrayReference a){

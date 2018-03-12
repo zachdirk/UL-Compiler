@@ -1,7 +1,7 @@
 package AST;
 import java.util.Vector;
 import Type.*;
-import Temp.*;
+import IR.Temp.*;
 import Visitor.*;
 public class FunctionBody extends ASTNode {
 	

@@ -6,21 +6,26 @@ all: grammar compiler
 grammar: $(GSRCS)
 	java org.antlr.Tool -fo . $(GSRC) 
 
-compiler: Visitors Types Environments AST
-	javac *.java -Xlint:unchecked
+compiler: Visitor Type Environment AST IR
+	javac Compiler.java -Xlint:unchecked
 
-Visitors:
+IR: Temp
+	javac IR/*.java -Xlint:unchecked
+
+Visitor: Environment AST
 	javac Visitor/*.java -Xlint:unchecked
 
-Types:
+Type:
 	javac Type/*.java -Xlint:unchecked
 
-Environments:
+Environment:
 	javac Environment/*.java -Xlint:unchecked
 
-AST:
+AST: IR 
 	javac AST/*.java -Xlint:unchecked
 
+Temp:
+	javac IR/Temp/*.java -Xlint:unchecked
 
 clean:
 	rm *.class $(GNAME)*.java $(GNAME)__.g $(GNAME).tokens *~ Type/*.class Type/*~ AST/*.class AST/*~ Environment/*.class Environment/*~ Visitor/*.class Visitor/*~

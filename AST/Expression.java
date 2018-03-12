@@ -1,6 +1,6 @@
 package AST;
 import Type.*;
-import Temp.*;
+import IR.Temp.*;
 import Visitor.*;
 public abstract class Expression extends ASTNode {
 	public abstract void acceptPrint(PrintVisitor v);

@@ -1,5 +1,5 @@
 package AST;
-import Temp.*;
+import IR.Temp.*;
 import Visitor.*;
 public class SemanticException extends RuntimeException{
 
