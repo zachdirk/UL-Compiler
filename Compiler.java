@@ -10,6 +10,8 @@ import java.io.*;
 import AST.*;
 import Type.*;
 import Visitor.*;
+import IR.*;
+import IR.Temp.*;
 public class Compiler {
 	public static void main (String[] args) throws Exception {
 		ANTLRInputStream input = null;
@@ -37,6 +39,7 @@ public class Compiler {
 		boolean optimization = false;
 		PrintVisitor print = new PrintVisitor();
 		SemanticVisitor semantic = new SemanticVisitor();
+		TempVisitor temp = new TempVisitor();
 		try {
 			program = parser.program();
 		}
@@ -67,6 +70,8 @@ public class Compiler {
 				System.out.println(e);
 				System.exit(1);
 			}
+			IRProgram ir = program.acceptTemp(temp, args[0]);
+			System.out.println(ir);
 		}
 	}
 }

@@ -1,4 +1,4 @@
 package IR;
-public class IRInstruction{
+public abstract class IRInstruction{
 
 }

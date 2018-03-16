@@ -1,6 +1,7 @@
 package AST;
 import Type.*;
-import IR.Temp.*;;
+import IR.Temp.*;
+import IR.*;
 import Visitor.*;
 public class Function extends ASTNode {
 
@@ -22,7 +23,7 @@ public class Function extends ASTNode {
 		return(v.visit(this));
 	}
 
-	public Temp acceptTemp(TempVisitor v){
+	public IRFunction acceptTemp(TempVisitor v){
 		return(v.visit(this));
 	}
 

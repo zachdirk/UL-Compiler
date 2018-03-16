@@ -1,2 +1,2 @@
 package IR.Temp;
-enum TempClass {UNKNOWN, PARAMETER, LOCAL, TEMP}
+public enum TempClass {UNKNOWN, PARAMETER, LOCAL, TEMP}

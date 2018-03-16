@@ -3,6 +3,7 @@ import java.util.Vector;
 import Type.*;
 import IR.Temp.*;
 import Visitor.*;
+import IR.*;
 public class Program extends ASTNode {
 	public Vector<Function> functionList;
 	
@@ -30,8 +31,8 @@ public class Program extends ASTNode {
 		return(v.visit(this));
 	}
 
-	public Temp acceptTemp(TempVisitor v){
-		return(v.visit(this));
+	public IRProgram acceptTemp(TempVisitor v, String name){
+		return(v.visit(this, name));
 	}
 
 

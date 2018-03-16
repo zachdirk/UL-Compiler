@@ -28,6 +28,6 @@ Temp:
 	javac IR/Temp/*.java -Xlint:unchecked
 
 clean:
-	rm *.class $(GNAME)*.java $(GNAME)__.g $(GNAME).tokens *~ Type/*.class Type/*~ AST/*.class AST/*~ Environment/*.class Environment/*~ Visitor/*.class Visitor/*~
+	rm *.class $(GNAME)*.java $(GNAME)__.g $(GNAME).tokens *~ Type/*.class Type/*~ AST/*.class AST/*~ Environment/*.class Environment/*~ Visitor/*.class Visitor/*~ IR/*.class IR/*~ IR/Temp/*.class IR/Temp/*~
 
  
