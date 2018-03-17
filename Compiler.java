@@ -70,7 +70,10 @@ public class Compiler {
 				System.out.println(e);
 				System.exit(1);
 			}
-			IRProgram ir = program.acceptTemp(temp, args[0]);
+			String fname = args[0];
+			if (fname.endsWith(".ul"))
+				fname = fname.substring(0, fname.lastIndexOf('.'));
+			IRProgram ir = program.acceptTemp(temp, fname);
 			System.out.println(ir);
 		}
 	}

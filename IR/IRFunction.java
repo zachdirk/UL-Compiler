@@ -15,7 +15,12 @@ public class IRFunction{
 	}
 
 	public String toString(){
-		String s = "FUNC " + name + " " + signature + "\n{\n}";
+		String s = "FUNC " + name + " " + signature + "\n{\n";
+		s = s + temps.toString();
+		for (int i = 0; i < instructions.size(); i++){
+			s = s + '\t' + instructions.get(i).toString() + ";\n";
+		}
+		s = s + "}";
 		return s;
 	}
 }

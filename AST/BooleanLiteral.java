@@ -15,9 +15,9 @@ public class BooleanLiteral extends Expression{
 	public String toString(){
 		String s = "";
 		if (b) 
-			s = "true";
+			s = "TRUE";
 		else if (!b)
-			s = "false";
+			s = "FALSE";
 		return(s);
 	}
 

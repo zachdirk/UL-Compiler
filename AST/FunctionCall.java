@@ -5,9 +5,9 @@ import IR.Temp.*;
 import Visitor.*;
 public class FunctionCall extends Expression{
 	public Identifier id;
-	public Vector v;
+	public Vector<Expression> v;
 
-	public FunctionCall(Identifier id, Vector v){
+	public FunctionCall(Identifier id, Vector<Expression> v){
 		this.id = id;
 		this.v = v;
 		this.lineNumber = id.lineNumber;

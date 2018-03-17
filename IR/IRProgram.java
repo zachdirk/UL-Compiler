@@ -22,7 +22,7 @@ public class IRProgram{
 	}
 	
 	public String toString(){
-		String s = name + '\n';
+		String s = "PROG " + name + '\n';
 		IRFunction f;
 		for (int i = 0; i < functions.size(); i++){
 			f = (IRFunction)functions.get(i);
