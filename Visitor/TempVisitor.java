@@ -37,10 +37,24 @@ public class TempVisitor{
 		return null;
 	}
 	public Temp visit(ArrayAssignment a){
-		return null;
+		String name = a.id.id;
+		Temp var = vEnv.lookup(name);		
+		Temp index = a.index.acceptTemp(this);
+		Temp expr = a.e.acceptTemp(this);
+		IRInstruction ir = new IRArrayAssignment(var, index, expr);
+		instr.add(ir);
+		return var;
 	}
 	public Temp visit(ArrayReference a){
-		return null;
+		String name = a.id.id;
+		Temp var = vEnv.lookup(name);
+		Temp expr = a.e.acceptTemp(this);
+		ArrayType at = (ArrayType)var.type;
+		Type t = at.t;
+		Temp result = temps.getTemp(t);
+		IRInstruction ir = new IRArrayReference(result, var, expr);
+		instr.add(ir);
+		return result;
 	}
 	public Temp visit(AssignmentStatement a){
 		Temp t1 = temps.findTemp(a.id.id);
@@ -290,6 +304,11 @@ public class TempVisitor{
 		String name = s.id.id;
 		Temp tmp = temps.getTemp(t, TempClass.LOCAL, name);
 		vEnv.add(name, tmp);
+		if (t instanceof ArrayType){
+			ArrayType at = (ArrayType)t;
+			IRInstruction ir = new IRArrayDeclaration(tmp, at.i);
+			instr.add(ir);
+		}
 		return tmp;
 	}
 	public Temp visit(VoidType t){

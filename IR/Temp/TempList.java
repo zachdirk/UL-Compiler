@@ -65,7 +65,6 @@ public class TempList{
 	}
 	
 	public String toString(){
-		Temp tmp;
 		String s = "";
 		for (int i = 0; i < temps.size(); i++)
 			s = s + '\t' + temps.get(i).toString() + '\n';
