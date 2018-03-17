@@ -9,7 +9,9 @@ public class ArrayAssignment extends Statement {
 	public ArrayAssignment(Identifier id, Expression index, Expression e){
 		this.id = id;
 		this.index = index;
-		this.e = e;	
+		this.e = e;
+		this.lineNumber = id.lineNumber;
+		this.offset = id.offset;	
 	}
 
 	public Type accept(Visitor v){

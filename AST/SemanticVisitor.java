@@ -32,8 +32,21 @@ public class SemanticVisitor implements Visitor{
 		return t;
 	}
 	public Type visit(ArrayAssignment a){
-		
-		return null;
+		Identifier id = a.id;
+		String name = id.id;
+		if (!vEnv.inCurrentScope(name)){
+			throw new SemanticException("Variable \"" + name + "\" undefined.", a.lineNumber, a.offset);
+		}
+		Type t1 = vEnv.lookup(name);
+		ArrayType t = (ArrayType)t1;
+		t1 = t.t;
+		Type t2 = a.e.accept(this);
+		if (!t1.getClass().equals(t2.getClass()))
+			throw new SemanticException("Type mismatch, variable \"" + a.id.id + "\" expected type " + t1 + " but got type " + t2, a.lineNumber, a.offset);
+		Type index = a.index.accept(this);
+		if (!(index instanceof IntegerType))
+			throw new SemanticException("Array index has invalid type " + index + ". Index must be of type integer.", a.lineNumber, a.offset);
+		return t1;
 	}
 	public Type visit(ArrayReference a){
 		Type t = a.e.accept(this);
