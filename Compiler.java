@@ -37,6 +37,7 @@ public class Compiler {
 		Program program = null;
 		boolean pretty_print = false;
 		boolean optimization = false;
+		boolean print_ir = false;
 		PrintVisitor print = new PrintVisitor();
 		SemanticVisitor semantic = new SemanticVisitor();
 		TempVisitor temp = new TempVisitor();
@@ -60,6 +61,8 @@ public class Compiler {
 						pretty_print = true;
 					if (s.equals("-o"))
 						optimization = true;
+					if (s.equals("-ir"))
+						print_ir = true;
 				}
 			}
 			try{
@@ -74,7 +77,8 @@ public class Compiler {
 			if (fname.endsWith(".ul"))
 				fname = fname.substring(0, fname.lastIndexOf('.'));
 			IRProgram ir = program.acceptTemp(temp, fname);
-			System.out.println(ir);
+			if (print_ir)			
+				System.out.println(ir);
 		}
 	}
 }
