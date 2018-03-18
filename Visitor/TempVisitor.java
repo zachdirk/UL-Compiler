@@ -23,13 +23,6 @@ public class TempVisitor{
 		temps = null;
 	}
 
-	/*private Type intOrFloat(Temp tmp1, Temp tmp2){
-		if (tmp1.type instanceof FloatType || tmp2.type instanceof FloatType)
-			return (new FloatType);
-		else
-			return (new IntegerType);
-	}*/
-
 	public Temp visit(AddExpression e){
 		Temp lhs = e.expr1.acceptTemp(this);
 		Temp rhs = e.expr2.acceptTemp(this);
