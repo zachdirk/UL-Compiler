@@ -16,22 +16,27 @@ public class IRBinaryOp extends IRInstruction {
 	
 	public String toString(){
 		String oper = "";
-		String type = Temp.IRType(left.type);
+		String type = "";
 		String s;
 		switch(op){
 			case ADD:
+				type = Temp.IRType(result.type);
 				oper = type + "+";
 				break;
 			case MULTIPLY:
+				type = Temp.IRType(result.type);
 				oper = type + "*";
 				break;
 			case SUBTRACT:
+				type = Temp.IRType(result.type);
 				oper = type + "-";
 				break;
 			case LESS:
+				type = Temp.IRType(left.type);
 				oper = type + "<";
 				break;
 			case EQUALS:
+				type = Temp.IRType(left.type);
 				oper = type + "==";
 				break;
 		}

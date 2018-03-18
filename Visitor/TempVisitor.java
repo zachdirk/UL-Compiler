@@ -23,12 +23,32 @@ public class TempVisitor{
 		temps = null;
 	}
 
-	
-	
+	/*private Type intOrFloat(Temp tmp1, Temp tmp2){
+		if (tmp1.type instanceof FloatType || tmp2.type instanceof FloatType)
+			return (new FloatType);
+		else
+			return (new IntegerType);
+	}*/
+
 	public Temp visit(AddExpression e){
 		Temp lhs = e.expr1.acceptTemp(this);
 		Temp rhs = e.expr2.acceptTemp(this);
-		Temp dest = temps.getTemp(lhs.type);
+		Type t = lhs.type;
+		Temp con;
+		if (!lhs.type.getClass().equals(rhs.type.getClass())){
+			t = new FloatType();
+			con = temps.getTemp(t);
+			IRInstruction ir;
+			if (lhs.type instanceof IntegerType){
+				ir = new IRConversion(lhs, con, new IntegerType(), new FloatType());			
+				lhs = con;
+			} else {
+				ir = new IRConversion(rhs, con, new IntegerType(), new FloatType());
+				rhs = con;
+			}
+			instr.add(ir);
+		}
+		Temp dest = temps.getTemp(t);
 		IRInstruction ir = new IRBinaryOp(dest, lhs, rhs, IRBinaryEnum.ADD);
 		instr.add(ir);
 		return(dest);
@@ -41,7 +61,22 @@ public class TempVisitor{
 		Temp var = vEnv.lookup(name);		
 		Temp index = a.index.acceptTemp(this);
 		Temp expr = a.e.acceptTemp(this);
-		IRInstruction ir = new IRArrayAssignment(var, index, expr);
+		Temp con;
+		IRInstruction ir;
+		ArrayType at = (ArrayType)var.type;
+		Type t = at.t;
+		if (!t.getClass().equals(expr.type.getClass())){
+			con = temps.getTemp(t);
+			if (t instanceof IntegerType){
+				ir = new IRConversion(expr, con, new FloatType(), new IntegerType());			
+			} else {
+				ir = new IRConversion(expr, con, new IntegerType(), new FloatType());
+			}
+			instr.add(ir);
+			ir = new IRArrayAssignment(var, index, con);
+		} else {
+			ir = new IRArrayAssignment(var, index, expr);
+		}
 		instr.add(ir);
 		return var;
 	}
@@ -59,8 +94,21 @@ public class TempVisitor{
 	public Temp visit(AssignmentStatement a){
 		Temp t1 = temps.findTemp(a.id.id);
 		Temp t2 = a.expr.acceptTemp(this);
-		IRInstruction ir = new IRAssignment(t1, t2);
-		instr.add(ir);	
+		Temp con;
+		IRInstruction ir;
+		if (!t1.type.getClass().equals(t2.type.getClass())){
+			con = temps.getTemp(t1.type);
+			if (t1.type instanceof IntegerType){
+				ir = new IRConversion(t2, con, new FloatType(), new IntegerType());			
+			} else {
+				ir = new IRConversion(t2, con, new IntegerType(), new FloatType());
+			}
+			instr.add(ir);
+			ir = new IRAssignment(t1, con);
+		} else {
+			ir = new IRAssignment(t1, t2);
+		}
+		instr.add(ir);
 		return t1;
 	}
 	public Temp visit(Block b){
@@ -93,6 +141,21 @@ public class TempVisitor{
 	public Temp visit(EqualityExpression e){
 		Temp lhs = e.expr1.acceptTemp(this);
 		Temp rhs = e.expr2.acceptTemp(this);
+		Type t = lhs.type;
+		Temp con;
+		if (!lhs.type.getClass().equals(rhs.type.getClass())){
+			t = new FloatType();
+			con = temps.getTemp(t);
+			IRInstruction ir;
+			if (lhs.type instanceof IntegerType){
+				ir = new IRConversion(lhs, con, new IntegerType(), new FloatType());			
+				lhs = con;
+			} else {
+				ir = new IRConversion(rhs, con, new IntegerType(), new FloatType());
+				rhs = con;
+			}
+			instr.add(ir);
+		}
 		Temp dest = temps.getTemp(new BooleanType());
 		IRInstruction ir = new IRBinaryOp(dest, lhs, rhs, IRBinaryEnum.EQUALS);
 		instr.add(ir);
@@ -229,6 +292,21 @@ public class TempVisitor{
 	public Temp visit(LessThanExpression e){
 		Temp lhs = e.expr1.acceptTemp(this);
 		Temp rhs = e.expr2.acceptTemp(this);
+		Type t = lhs.type;
+		Temp con;
+		if (!lhs.type.getClass().equals(rhs.type.getClass())){
+			t = new FloatType();
+			con = temps.getTemp(t);
+			IRInstruction ir;
+			if (lhs.type instanceof IntegerType){
+				ir = new IRConversion(lhs, con, new IntegerType(), new FloatType());			
+				lhs = con;
+			} else {
+				ir = new IRConversion(rhs, con, new IntegerType(), new FloatType());
+				rhs = con;
+			}
+			instr.add(ir);
+		}
 		Temp dest = temps.getTemp(new BooleanType());
 		IRInstruction ir = new IRBinaryOp(dest, lhs, rhs, IRBinaryEnum.LESS);
 		instr.add(ir);
@@ -237,7 +315,22 @@ public class TempVisitor{
 	public Temp visit(MultExpression e){
 		Temp lhs = e.expr1.acceptTemp(this);
 		Temp rhs = e.expr2.acceptTemp(this);
-		Temp dest = temps.getTemp(lhs.type);
+		Type t = lhs.type;
+		Temp con;
+		if (!lhs.type.getClass().equals(rhs.type.getClass())){
+			t = new FloatType();
+			con = temps.getTemp(t);
+			IRInstruction ir;
+			if (lhs.type instanceof IntegerType){
+				ir = new IRConversion(lhs, con, new IntegerType(), new FloatType());			
+				lhs = con;
+			} else {
+				ir = new IRConversion(rhs, con, new IntegerType(), new FloatType());
+				rhs = con;
+			}
+			instr.add(ir);
+		}
+		Temp dest = temps.getTemp(t);
 		IRInstruction ir = new IRBinaryOp(dest, lhs, rhs, IRBinaryEnum.MULTIPLY);
 		instr.add(ir);
 		return(dest);
@@ -294,7 +387,22 @@ public class TempVisitor{
 	public Temp visit(SubtractExpression e){
 		Temp lhs = e.expr1.acceptTemp(this);
 		Temp rhs = e.expr2.acceptTemp(this);
-		Temp dest = temps.getTemp(lhs.type);
+		Type t = lhs.type;
+		Temp con;
+		if (!lhs.type.getClass().equals(rhs.type.getClass())){
+			t = new FloatType();
+			con = temps.getTemp(t);
+			IRInstruction ir;
+			if (lhs.type instanceof IntegerType){
+				ir = new IRConversion(lhs, con, new IntegerType(), new FloatType());			
+				lhs = con;
+			} else {
+				ir = new IRConversion(rhs, con, new IntegerType(), new FloatType());
+				rhs = con;
+			}
+			instr.add(ir);
+		}
+		Temp dest = temps.getTemp(t);
 		IRInstruction ir = new IRBinaryOp(dest, lhs, rhs, IRBinaryEnum.SUBTRACT);
 		instr.add(ir);
 		return(dest);
