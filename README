@@ -1,8 +1,11 @@
-Submission for CSC435 Assignment 1 part 2 by Zachary Dirk.
+Submission for CSC435 Assignment 3 by Zachary Dirk.
+
 Compile by using MAKE. I have not changed anything other than the name of the grammar file.
-To evoke the compiler, use "java Compiler [filename]". This will always invoke the semantic/type checker as well.
+To evoke the compiler, use "java Compiler [filename]". This will always invoke the semantic/type checker as well and IR generation (but not IR output, see below).
 To evoke the pretty printer, add the -pp flag e.g.: "java Compiler [filename] -pp"
 You can redirect the pretty printer output to a file for easy comparison like so "java Compiler [filename] -pp > output.txt"
+To evoke IR output you must add the -ir flag.
+Example usage for IR output redirected to file: "java Compiler [filename] -ir > test.ir"
 
 Notes for Assignment 2:
  - The error for the empty file reports both a SemanticException (from my Semantic checker) as well as an ANTLR error - I can't figure out how to disable the ANTLR error.
@@ -17,3 +20,10 @@ I'm doing this asymetrically which means that the following are not valid:
 	Float + String
 	Boolean + String
 Everything else is as specified in the assignment document.
+
+Notes for Assignment 3:
+ - Corrected a bug with Arrays that may or may not have been caught in Assignment 2 (regarding assignment to arrays specifically)
+ - Float/Integer subtyping works exactly as described in the notes for assignment 2 with one exception: it does not work in function parameters. 
+Meaning that function parameters must match exactly, you can't substitute a float for an int or vice versa (I am looking to fix this but it's not trivial).
+ - Implicit type casting for string concatenation has not yet been implemented because there is no I2U or F2U etc operator in this IR that I can see in the specifications.
+I will ask Jason about this if I can't figure it out because I'd still like to implement it. 
