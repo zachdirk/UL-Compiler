@@ -23,7 +23,6 @@ Everything else is as specified in the assignment document.
 
 Notes for Assignment 3:
  - Corrected a bug with Arrays that may or may not have been caught in Assignment 2 (regarding assignment to arrays specifically)
- - Float/Integer subtyping works exactly as described in the notes for assignment 2 with one exception: it does not work in function parameters. 
-Meaning that function parameters must match exactly, you can't substitute a float for an int or vice versa (I am looking to fix this but it's not trivial).
+ - Float/Integer subtyping works exactly as described in the notes for assignment 2 
  - Implicit type casting for string concatenation has not yet been implemented because there is no I2U or F2U etc operator in this IR that I can see in the specifications.
-I will ask Jason about this if I can't figure it out because I'd still like to implement it. 
+I will ask Jason about this if I can't figure it out because I'd still like to implement it. This means some things will still pass the semantic checker but crash in the IR (like "hello" + 5 ) for example
