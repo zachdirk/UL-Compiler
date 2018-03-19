@@ -53,14 +53,17 @@ public class SemanticVisitor{
 			if ((t1 instanceof IntegerType && t2 instanceof FloatType) || (t1 instanceof FloatType && t2 instanceof IntegerType))
 				return t1;
 			else
-				throw new SemanticException("Type mismatch, variable \"" + a.id.id + "\" expected type " + t1 + " but got type " + t2, a.lineNumber, a.offset);
+				throw new SemanticException("Array Type mismatch, variable \"" + a.id.id + "\" expected type " + t1 + " but got type " + t2, a.lineNumber, a.offset);
 		}		
 		return null;
 	}
 	public Type visit(ArrayReference a){
-		Type t = a.e.acceptSemantic(this);
-		if (!(t instanceof IntegerType))
-			throw new SemanticException("Array index has invalid type " + t + ". Index must be of type integer.", a.lineNumber, a.offset);
+		Type index = a.e.acceptSemantic(this);
+		Type t = vEnv.lookup(a.id.id);
+		ArrayType arr = (ArrayType)t;
+		t = arr.t;
+		if (!(index instanceof IntegerType))
+			throw new SemanticException("Array index has invalid type " + index + ". Index must be of type integer.", a.lineNumber, a.offset);
 		return t;
 	}
 	public Type visit(AssignmentStatement a){
