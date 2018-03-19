@@ -202,15 +202,35 @@ public class TempVisitor{
 	public Temp visit(FunctionCall f){
 		Identifier id = f.id;
 		String name = id.id;
-		Type funcType = fEnv.lookup(name).t;
+		FunctionDeclaration fd = fEnv.lookup(name);
+		Type funcType = fd.t;
+		Vector<FormalParameter> params = fd.fpl.parameterList;
 		Vector<Expression> v = f.v;
 		Vector<Temp> v2 = new Vector<Temp>();
 		Expression e;
+		FormalParameter fp;
 		Temp tmp;
+		Type paramType;
 		for (int i = 0; i < v.size(); i++){
 			e = (Expression)v.get(i);
+			fp = (FormalParameter)params.get(i);
+			paramType = fp.t;			
 			tmp = e.acceptTemp(this);
-			v2.add(tmp);
+			
+			Temp con;
+			IRInstruction ir;
+			if (!tmp.type.getClass().equals(paramType.getClass())){
+				con = temps.getTemp(paramType);
+				if (paramType instanceof IntegerType){
+					ir = new IRConversion(tmp, con, new FloatType(), new IntegerType());				
+				} else {
+					ir = new IRConversion(tmp, con, new IntegerType(), new FloatType());
+				}
+				instr.add(ir);
+				v2.add(con);
+			} else {
+				v2.add(tmp);
+			}
 		}
 		Temp ret = null;
 		IRInstruction ir = null;
@@ -240,6 +260,8 @@ public class TempVisitor{
 		f.fd.acceptTemp(this);
 		f.fb.acceptTemp(this);
 		IRFunction irf = new IRFunction(currentFunction, currentSignature, instr, temps);
+		IRInstruction ir = new IRReturnStatement(null);
+		instr.add(ir);
 		vEnv.endScope();
 		return irf;
 	}
@@ -363,6 +385,8 @@ public class TempVisitor{
 		return irp;
 	}
 	public Temp visit(ReturnStatement s){
+		if (s.e == null)
+			return null;
 		Temp tmp = s.e.acceptTemp(this);
 		IRInstruction ir = new IRReturnStatement(tmp);
 		instr.add(ir);

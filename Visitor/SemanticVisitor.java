@@ -287,6 +287,8 @@ public class SemanticVisitor{
 		return null;
 	}
 	public Type visit(ReturnStatement s){
+		if (s.e == null)
+			return null;
 		Type t1 = s.e.acceptSemantic(this);
 		Type t2 = currentFunctionType;
 		if (!t1.getClass().equals(t2.getClass())){

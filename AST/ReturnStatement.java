@@ -5,10 +5,10 @@ import Type.*;
 public class ReturnStatement extends Statement{
 	public Expression e;
 	
-	public ReturnStatement(Expression e){
+	public ReturnStatement(Expression e, int lineNumber, int offset){
 		this.e = e;
-		this.lineNumber = e.lineNumber;
-		this.offset = e.offset;
+		this.lineNumber = lineNumber;
+		this.offset = offset;
 	}
 
 	public void acceptPrint(PrintVisitor v){

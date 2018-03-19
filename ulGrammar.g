@@ -118,7 +118,7 @@ printlnStmt returns [PrintLnStatement p]
 		;
 
 returnStmt returns [ReturnStatement r]	
-		: RETURN e=expr? ';' {r = new ReturnStatement(e);}
+		: ret=RETURN e=expr? ';' {r = new ReturnStatement(e, $ret.line, $ret.pos);}
 		;
 
 assignStmt returns [AssignmentStatement a]	
