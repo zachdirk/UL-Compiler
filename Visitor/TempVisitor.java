@@ -28,14 +28,20 @@ public class TempVisitor{
 		Temp rhs = e.expr2.acceptTemp(this);
 		Type t = lhs.type;
 		Temp con;
-		if (!lhs.type.getClass().equals(rhs.type.getClass())){
-			t = new FloatType();
-			con = temps.getTemp(t);
+		if (!lhs.type.getClass().equals(rhs.type.getClass())){			
 			IRInstruction ir;
-			if (lhs.type instanceof IntegerType){
+			if (t instanceof StringType){
+				con = temps.getTemp(new StringType());
+				ir = new IRConversion(rhs, con, rhs.type, new StringType());
+				rhs = con;
+			} else if (lhs.type instanceof IntegerType){
+				t = new FloatType();
+				con = temps.getTemp(t);
 				ir = new IRConversion(lhs, con, new IntegerType(), new FloatType());			
 				lhs = con;
 			} else {
+				t = new FloatType();
+				con = temps.getTemp(t);
 				ir = new IRConversion(rhs, con, new IntegerType(), new FloatType());
 				rhs = con;
 			}
