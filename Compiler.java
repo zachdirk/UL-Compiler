@@ -7,11 +7,13 @@
 
 import org.antlr.runtime.*;
 import java.io.*;
+import java.util.Vector;
 import AST.*;
 import Type.*;
 import Visitor.*;
 import IR.*;
 import IR.Temp.*;
+import Codegen.*;
 public class Compiler {
 	public static void main (String[] args) throws Exception {
 		ANTLRInputStream input = null;
@@ -38,6 +40,7 @@ public class Compiler {
 		boolean pretty_print = false;
 		boolean optimization = false;
 		boolean print_ir = false;
+		boolean print_j = false;
 		PrintVisitor print = new PrintVisitor();
 		SemanticVisitor semantic = new SemanticVisitor();
 		TempVisitor temp = new TempVisitor();
@@ -63,6 +66,8 @@ public class Compiler {
 						optimization = true;
 					if (s.equals("-ir"))
 						print_ir = true;
+					if (s.equals("-j"))
+						print_j = true;
 				}
 			}
 			try{
@@ -79,6 +84,9 @@ public class Compiler {
 			IRProgram ir = program.acceptTemp(temp, fname);
 			if (print_ir)			
 				System.out.println(ir);
+			JFile file = new JFile(ir);
+			if (print_j)
+				file.print();
 		}
 	}
 }

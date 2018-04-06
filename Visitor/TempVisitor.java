@@ -5,12 +5,14 @@ import IR.Temp.*;
 import AST.*;
 import Type.*;
 import Environment.*;
+import Codegen.*;
 public class TempVisitor{
 
 	ListEnvironment<String, FunctionDeclaration> fEnv;
 	ListEnvironment<String, Temp> vEnv;
 
 	String currentSignature;
+	String currentJSignature;
 	String currentFunction;
 	Vector<IRInstruction> instr;
 	TempList temps;
@@ -177,6 +179,7 @@ public class TempVisitor{
 		Type t = p.t;
 		String name = p.id.id;
 		currentSignature = currentSignature + Temp.IRType(t);
+		currentJSignature = currentJSignature + JFile.VarType(t);
 		Temp tmp = temps.getTemp(t, TempClass.PARAMETER, name);
 		vEnv.add(name, tmp);
 		return tmp;
@@ -184,6 +187,7 @@ public class TempVisitor{
 	public Temp visit(FormalParameterList p){
 		FormalParameter fp;
 		currentSignature = "(";
+		currentJSignature = "(";
 		for (int i = 0; i < p.parameterList.size(); i++){
 			fp = p.parameterList.get(i);
 			fp.acceptTemp(this);
@@ -254,8 +258,10 @@ public class TempVisitor{
 		currentFunction = f.id.id;
 		Type returnType = f.t;
 		String returnString = Temp.IRType(returnType);
+		String jReturnString = JFile.VarType(returnType);
 		f.fpl.acceptTemp(this);
 		currentSignature = currentSignature + ')' + returnString;
+		currentJSignature = currentJSignature + ')' + jReturnString;
 		return null;	
 	}
 	public IRFunction visit(Function f){
@@ -265,7 +271,7 @@ public class TempVisitor{
 		instr = new Vector<IRInstruction>();
 		f.fd.acceptTemp(this);
 		f.fb.acceptTemp(this);
-		IRFunction irf = new IRFunction(currentFunction, currentSignature, instr, temps);
+		IRFunction irf = new IRFunction(currentFunction, currentSignature, currentJSignature, instr, temps);
 		IRInstruction ir = new IRReturnStatement(null);
 		instr.add(ir);
 		vEnv.endScope();
