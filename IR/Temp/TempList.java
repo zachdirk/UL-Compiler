@@ -3,9 +3,9 @@ import Type.*;
 import java.util.Vector;
 public class TempList{
 
-	int numTemps;
-	Vector<TempEntry> temps;
-	boolean optimize;
+	public int numTemps;
+	public Vector<TempEntry> temps;
+	public boolean optimize;
 
 	public TempList(){
 		numTemps = 0;
@@ -21,6 +21,10 @@ public class TempList{
 				return(e.t);
 		}
 		return(null);
+	}
+
+	public int numTemps(){
+		return numTemps;
 	}
 
 	public Temp getTemp(Type t){
@@ -62,6 +66,10 @@ public class TempList{
 					return true;
 		}
 		return false; 
+	}
+	
+	public TempEntry get(int i){
+		return (TempEntry)temps.get(i);
 	}
 	
 	public String toString(){

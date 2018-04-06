@@ -8,7 +8,7 @@ public class TempEntry{
 	public String name;
 
 	public TempEntry(Temp t, boolean inUse){
-		this(t, inUse, TempClass.TEMP, "");
+		this(t, inUse, TempClass.TEMP, "T" + t.n);
 	}
 
 	public TempEntry(Temp t, boolean inUse, TempClass cls, String name){
