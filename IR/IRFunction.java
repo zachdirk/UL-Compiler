@@ -4,12 +4,14 @@ import java.util.Vector;
 public class IRFunction{
 	public String name;
 	public String signature;
+	public String jSignature;
 	public Vector<IRInstruction> instructions;
 	public TempList temps;
 
-	public IRFunction(String name, String signature, Vector<IRInstruction> instructions, TempList temps){
+	public IRFunction(String name, String signature, String jSignature, Vector<IRInstruction> instructions, TempList temps){
 		this.name = name;
 		this.signature = signature;
+		this.jSignature = jSignature;
 		this.instructions = instructions;
 		this.temps = temps;
 	}
