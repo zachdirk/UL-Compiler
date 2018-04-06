@@ -1,14 +1,17 @@
 package IR;
 import java.util.Vector;
 import IR.Temp.*;
+import Type.*;
 public class IRCallStatement extends IRInstruction{
 
 	public String func;
 	public Vector<Temp> params;
+	public Type returnType;
 
-	public IRCallStatement(String func, Vector<Temp> params){
+	public IRCallStatement(String func, Vector<Temp> params, Type returnType){
 		this.func = func;
 		this.params = params;
+		this.returnType = returnType;
 	}
 
 	public String toString(){

@@ -244,7 +244,7 @@ public class TempVisitor{
 		}
 		Temp ret = null;
 		IRInstruction ir = null;
-		IRCallStatement ic = new IRCallStatement(name, v2);
+		IRCallStatement ic = new IRCallStatement(name, v2, funcType);
 		if (!(funcType instanceof VoidType)){
 			ret = temps.getTemp(funcType);
 			ir = new IRCallAssignment(ret, ic);
