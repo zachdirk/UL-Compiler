@@ -10,3 +10,6 @@ ulGrammar__.g
 *.sh
 withSubtypes/
 withoutSubtypes/
+*.ir
+*.ul
+*.j
