@@ -30,18 +30,18 @@ public class TempVisitor{
 		Temp rhs = e.expr2.acceptTemp(this);
 		Type t = lhs.type;
 		Temp con;
-		if (!lhs.type.getClass().equals(rhs.type.getClass())){			
+		if (!lhs.type.getClass().equals(rhs.type.getClass())){	//if the classes aren't equal		
 			IRInstruction ir;
-			if (t instanceof StringType){
+			if (t instanceof StringType){ //if left is string type we convert right to string type always
 				con = temps.getTemp(new StringType());
 				ir = new IRConversion(rhs, con, rhs.type, new StringType());
 				rhs = con;
-			} else if (lhs.type instanceof IntegerType){
+			} else if (lhs.type instanceof IntegerType){ //if left is int type we convert left to float type 
 				t = new FloatType();
 				con = temps.getTemp(t);
 				ir = new IRConversion(lhs, con, new IntegerType(), new FloatType());			
 				lhs = con;
-			} else {
+			} else { //otherwise left is float type so we convert right to float type
 				t = new FloatType();
 				con = temps.getTemp(t);
 				ir = new IRConversion(rhs, con, new IntegerType(), new FloatType());
