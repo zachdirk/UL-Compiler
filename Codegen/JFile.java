@@ -220,7 +220,7 @@ public class JFile {
 		char prefix = JType(result.type);
 		int first = label++;
 		int second = label++;
-		if (result.type instanceof StringType){
+		if (left.type instanceof StringType){
 			switch(op){
 				case ADD:
 					System.out.println("\tnew java/lang/StringBuffer");

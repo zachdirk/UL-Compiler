@@ -1,11 +1,13 @@
 Submission for CSC435 Assignment 3 by Zachary Dirk.
 
 Compile by using MAKE. I have not changed anything other than the name of the grammar file.
-To evoke the compiler, use "java Compiler [filename]". This will always invoke the semantic/type checker as well and IR generation (but not IR output, see below).
+To evoke the compiler, use "java Compiler [filename] [flag]". This will always invoke the semantic/type checker as well and IR generation (but not IR output, see below).
 To evoke the pretty printer, add the -pp flag e.g.: "java Compiler [filename] -pp"
-You can redirect the pretty printer output to a file for easy comparison like so "java Compiler [filename] -pp > output.txt"
+You can redirect the pretty printer output to a file for easy comparison like so "java Compiler [filename] -pp > [filename].txt"
 To evoke IR output you must add the -ir flag.
-Example usage for IR output redirected to file: "java Compiler [filename] -ir > test.ir"
+Example usage for IR output redirected to file: "java Compiler [filename] -ir > [filename].ir"
+To evoke Java assembly output you must add the -j flag.
+Example usage for J file output redirected to file: "java Compiler [filename] -j > [filename].j"
 
 Notes for Assignment 2:
  - The error for the empty file reports both a SemanticException (from my Semantic checker) as well as an ANTLR error - I can't figure out how to disable the ANTLR error.
@@ -26,3 +28,8 @@ Notes for Assignment 3:
  - Float/Integer subtyping works exactly as described in the notes for assignment 2 
  - Implicit type casting for string concatenation has not yet been implemented because there is no I2U or F2U etc operator in this IR that I can see in the specifications.
 I will ask Jason about this if I can't figure it out because I'd still like to implement it. This means some things will still pass the semantic checker but crash in the IR (like "hello" + 5 ) for example
+
+Notes for Assignment 4:
+ - No known bugs
+ - Float/Integer subtyping works exactly as describe in the notes for assignment 2
+ - Implicit type casting for string concatenation HAS been implemented by adding a X2U operator to the IR and parsing that.
