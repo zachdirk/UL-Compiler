@@ -21,7 +21,7 @@ public class JFile {
 			return 'f';
 		else if (t instanceof VoidType)
 			return 'v';
-		else
+		else 
 			return 'i'; 
 	}
 
@@ -58,8 +58,12 @@ public class JFile {
 		String exp = e.toString();
 		if (t instanceof CharType){
 			exp = "" + (int)exp.charAt(1);
-		} 
-
+		} else if (t instanceof BooleanType){
+			if (exp.equals("TRUE"))
+				exp = "1";
+			else
+				exp = "0";
+		}
 		System.out.println("\tldc " + exp);
 		System.out.println("\t" + c + "store " + n);
 	}
@@ -73,6 +77,13 @@ public class JFile {
 		System.out.println("\taload " + arr.n);
 		System.out.println("\tiload " + index.n);
 		System.out.println("\t" + c + "load " + expr.n);
+		if (t instanceof CharType)
+			System.out.println("\tcastore");
+		else if (t instanceof BooleanType)
+			System.out.println("\tbastore");
+		else
+			System.out.println("\t" + c + "astore");
+		
 	}
 
 	private void printIRArrayDeclaration(IRArrayDeclaration ir){
@@ -102,7 +113,12 @@ public class JFile {
 		char c = JType(t);
 		System.out.println("\taload " + arr.n);
 		System.out.println("\tiload " + index.n);
-		System.out.println("\t" + c + "aload ");
+		if (t instanceof CharType)
+			System.out.println("\tcaload");
+		else if (t instanceof BooleanType)
+			System.out.println("\tbaload");
+		else
+			System.out.println("\t" + c + "aload ");
 		System.out.println("\t" + c + "store " + result.n);
 	}
 
@@ -181,22 +197,19 @@ public class JFile {
 		char c2 = JType(to);
 		System.out.println("\t" + c1 + "load " + var.n);
 		if (to instanceof StringType){
-			/*String s = VarType(to);
 			if (from instanceof IntegerType) {
-				System.out.println("\tgetstatic 
-				System.out.println("\tinvokestatic java/lang/Integer.toString:(I)Ljava/lang/String;");
-				System.out.println("\tastore " + result.n);
+				System.out.println("\tinvokestatic java/lang/Integer/toString(I)Ljava/lang/String;");
 			} else if (from instanceof FloatType) {
-
+				System.out.println("\tinvokestatic java/lang/Float/toString(F)Ljava/lang/String;");
 			} else if (from instanceof BooleanType) {
-
+				System.out.println("\tinvokestatic java/lang/Boolean/toString(Z)Ljava/lang/String;");
 			} else if (from instanceof CharType) {
-
-			}*/
+				System.out.println("\tinvokestatic java/lang/Character/toString(C)Ljava/lang/String;");
+			}
 		} else {
 			System.out.println("\t" + c1 + "2" + c2);
-			System.out.println("\t" + c2 + "store " + result.n);
 		}
+		System.out.println("\t" + c2 + "store " + result.n);
 	}
 
 	private void printIRBinaryOP(IRBinaryOp ir){
@@ -204,44 +217,80 @@ public class JFile {
 		Temp left = ir.left;
 		Temp right = ir.right;
 		IRBinaryEnum op = ir.op;
-		String operation;
 		char prefix = JType(result.type);
-		int first;
-		int second;
-		System.out.println("\t" + prefix + "load " + left.n);
-		System.out.println("\t" + prefix + "load " + right.n);		
-		switch(op){
-			case ADD:
-				System.out.println("\t" + prefix + "add");
-				break;
-			case MULTIPLY:
-				System.out.println("\t" + prefix + "mul");
-				break;
-			case SUBTRACT:
-				System.out.println("\t" + prefix + "sub");
-				break;
-			case LESS:
-				first = label++;
-				second = label++;
-				System.out.println("\t" + prefix + "sub");
-				System.out.println("\tiflt L_" + first);
-				System.out.println("\tldc 0");
-				System.out.println("\tgoto L_" + second);
-				System.out.println("L_" + first + ":");
-				System.out.println("\tldc 1");
-				System.out.println("L_" + second + ":");
-				break;
-			case EQUALS:
-				first = label++;
-				second = label++;
-				System.out.println("\t" + prefix + "sub");
-				System.out.println("\tifeq L_" + first);
-				System.out.println("\tldc 0");
-				System.out.println("\tgoto L_" + second);
-				System.out.println("L_" + first + ":");
-				System.out.println("\tldc 1");
-				System.out.println("L_" + second + ":");
-				break;
+		int first = label++;
+		int second = label++;
+		if (result.type instanceof StringType){
+			switch(op){
+				case ADD:
+					System.out.println("\tnew java/lang/StringBuffer");
+					System.out.println("\tdup");
+					System.out.println("\tinvokenonvirtual java/lang/StringBuffer/<init>()V");
+					System.out.println("\taload " + left.n);
+					System.out.println("\tinvokevirtual java/lang/StringBuffer/append(Ljava/lang/String;)Ljava/lang/StringBuffer;");
+					System.out.println("\taload " + right.n);
+					System.out.println("\tinvokevirtual java/lang/StringBuffer/append(Ljava/lang/String;)Ljava/lang/StringBuffer;");
+					System.out.println("\tinvokevirtual java/lang/StringBuffer/toString()Ljava/lang/String;");
+					break;
+				case LESS:
+					System.out.println("\taload " + left.n);
+					System.out.println("\taload " + right.n);
+					System.out.println("\tinvokevirtual java/lang/String/compareTo(Ljava/lang/String;)I");
+					System.out.println("\tiflt L_" + first);
+					System.out.println("\tldc 0");
+					System.out.println("\tgoto L_" + second);
+					System.out.println("L_" + first + ":");
+					System.out.println("\tldc 1");
+					System.out.println("L_" + second + ":");
+					break;
+				case EQUALS:
+					System.out.println("\taload " + left.n);
+					System.out.println("\taload " + right.n);
+					System.out.println("\tinvokevirtual java/lang/String/compareTo(Ljava/lang/String;)I");
+					System.out.println("\tifeq L_" + first);
+					System.out.println("\tldc 0");
+					System.out.println("\tgoto L_" + second);
+					System.out.println("L_" + first + ":");
+					System.out.println("\tldc 1");
+					System.out.println("L_" + second + ":");
+					break;
+			}	
+		} else {
+			System.out.println("\t" + prefix + "load " + left.n);
+			System.out.println("\t" + prefix + "load " + right.n);		
+			switch(op){
+				case ADD:
+					System.out.println("\t" + prefix + "add");				
+					break;
+				case MULTIPLY:
+					System.out.println("\t" + prefix + "mul");
+					break;
+				case SUBTRACT:
+					System.out.println("\t" + prefix + "sub");
+					break;
+				case LESS:
+					first = label++;
+					second = label++;
+					System.out.println("\t" + prefix + "sub");
+					System.out.println("\tiflt L_" + first);
+					System.out.println("\tldc 0");
+					System.out.println("\tgoto L_" + second);
+					System.out.println("L_" + first + ":");
+					System.out.println("\tldc 1");
+					System.out.println("L_" + second + ":");
+					break;
+				case EQUALS:
+					first = label++;
+					second = label++;
+					System.out.println("\t" + prefix + "sub");
+					System.out.println("\tifeq L_" + first);
+					System.out.println("\tldc 0");
+					System.out.println("\tgoto L_" + second);
+					System.out.println("L_" + first + ":");
+					System.out.println("\tldc 1");
+					System.out.println("L_" + second + ":");
+					break;
+			}
 		}
 		System.out.println("\t" + prefix + "store " + result.n);
 	}
@@ -337,9 +386,8 @@ public class JFile {
 	}
 
 	private void printIRProgramHeader(){
-		String programName = prog.name;
-		System.out.println(".source " + programName + ".ir");
-		System.out.println(".class public " + programName);
+		System.out.println(".source " + prog.name + ".ir");
+		System.out.println(".class public " + prog.name);
 		System.out.println(".super java/lang/Object");
 		System.out.println();
 	}
@@ -350,7 +398,7 @@ public class JFile {
 		System.out.println(".method public static main([Ljava/lang/String;)V");
 		System.out.println("\t.limit locals 1");
 		System.out.println("\t.limit stack 4");
-		System.out.println("\tinvokestatic test/__main__()V");
+		System.out.println("\tinvokestatic " + prog.name + "/__main__()V");
 		System.out.println("\treturn");
 		System.out.println(".end method");
 		System.out.println();
