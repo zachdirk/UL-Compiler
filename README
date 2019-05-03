@@ -1,4 +1,10 @@
-Submission for CSC435 Assignment 3 by Zachary Dirk.
+This is the compiler I wrote for the fourth year compiler course at UVic. I cannot share the language specification as it does not belong to me,
+but it's very similar to C. You could reverse engineer it pretty easily by looking at the sample tests, or the grammar. 
+
+To compile this project you will need ANTLR, Make, and Java. Unfortunately I did not remember to note which versions of each software I used.
+Instructions to run the program are found below, along with my original README notes.
+
+Submission for CSC435 Assignment 4 by Zachary Dirk.
 
 Compile by using MAKE. I have not changed anything other than the name of the grammar file.
 To evoke the compiler, use "java Compiler [filename] [flag]". This will always invoke the semantic/type checker as well and IR generation (but not IR output, see below).
@@ -11,13 +17,16 @@ Example usage for J file output redirected to file: "java Compiler [filename] -j
 
 Notes for Assignment 2:
  - The error for the empty file reports both a SemanticException (from my Semantic checker) as well as an ANTLR error - I can't figure out how to disable the ANTLR error.
- - I have implemented "subtyping" for integers and floats in such a way that floats and integers can be used interchangeably. Because explicit casting doesn't exist, I have allowed for assigning floats to integers. As a result, test cases wSt_3.1.5_invalid.ul, wSt_3.1.6_invalid.ul, wSt_3.2.2.a_invalid.ul, and wSt_3.3.b_invalid.ul are actually all valid for me. In later assignments this will translate to floats being truncated to integers (e.g. int a = 3.5 -> a = 3).
+ - I have implemented "subtyping" for integers and floats in such a way that floats and integers can be used interchangeably. Because explicit casting doesn't exist, I have allowed for assigning floats to integers. 
+	As a result, test cases wSt_3.1.5_invalid.ul, wSt_3.1.6_invalid.ul, wSt_3.2.2.a_invalid.ul, and wSt_3.3.b_invalid.ul are actually all valid for me. 
+	In later assignments this will translate to floats being truncated to integers (e.g. int a = 3.5 -> a = 3).
  - I have added implicit type casting for string concatenation, meaning the following expressions are valid: 
 	String + Int
 	String + Float
 	String + Boolean
 	String + String (already valid by default)
-I'm doing this asymetrically which means that the following are not valid:
+	
+	I'm doing this asymetrically which means that the following are not valid:
 	Int + String
 	Float + String
 	Boolean + String
