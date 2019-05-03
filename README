@@ -1,5 +1,4 @@
-This is the compiler I wrote for the fourth year compiler course at UVic. I cannot share the language specification as it does not belong to me,
-but it's very similar to C. You could reverse engineer it pretty easily by looking at the sample tests, or the grammar. 
+This is the compiler I wrote for the fourth year compiler course at UVic. I cannot share the language specification as it does not belong to me, but it's very similar to C. You could reverse engineer it pretty easily by looking at the sample tests, or the grammar. 
 
 To compile this project you will need ANTLR, Make, and Java. Unfortunately I did not remember to note which versions of each software I used.
 Instructions to run the program are found below, along with my original README notes.
